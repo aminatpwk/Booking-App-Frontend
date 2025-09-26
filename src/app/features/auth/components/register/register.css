@@ -1,0 +1,208 @@
+:root {
+  --primary-blue: rgba(89, 140, 255, 0.84);
+  --dark-blue: rgba(29, 78, 216, 0.34);
+  --light-blue: #dbeafe;
+  --white: rgba(4, 60, 108, 0.25);
+  --light-grey: #f8fafc;
+  --medium-grey: #64748b;
+  --dark-grey: #334155;
+  --border-grey: rgba(4, 60, 108, 0.61);
+  --error-red: #da1212;
+  --success-green: rgba(30, 108, 4, 0.97);
+}
+
+form {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-grey);
+}
+
+.register-form {
+  margin-bottom: 1.5rem;
+}
+
+p {
+  margin-bottom: 1.25rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--dark-grey);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  font-family: "Segoe UI", sans-serif;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--border-grey);
+  border-radius: 10px;
+  font-size: 1.1rem;
+  color: var(--dark-grey);
+  background-color: #f1f5f9;
+  transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+  font-weight: 500;
+  min-height: 52px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover {
+  border-color: var(--primary-blue);
+  background-color: #f8fafc;
+  transform: translateY(-1px);
+}
+
+input::placeholder {
+  color: var(--medium-grey);
+  opacity: 0.7;
+}
+
+button {
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  background: #053865;
+  color: rgba(255, 255, 255, 0.91);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family:  "Microsoft Sans Serif", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  min-height: 56px;
+  margin-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3), 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+button:disabled {
+  background: var(--medium-grey);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+button:disabled:hover {
+  background: var(--medium-grey);
+  transform: none;
+}
+
+input.error {
+  border-color: var(--error-red);
+  background-color: #fef2f2;
+}
+
+input.error:focus {
+  border-color: var(--error-red);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+input.success {
+  border-color: var(--success-green);
+  background-color: #f0fdf4;
+}
+
+@media (max-width: 480px) {
+  form {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 0.625rem;
+  }
+
+  button {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+button.loading {
+  position: relative;
+  color: transparent;
+}
+
+button.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid var(--white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.form-title {
+  text-align: center;
+  color: var(--dark-grey);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--light-blue);
+  padding-bottom: 0.5rem;
+}
+
+.register-form::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+  border-radius: 12px 12px 0 0;
+}
+
+form {
+  position: relative;
+}
