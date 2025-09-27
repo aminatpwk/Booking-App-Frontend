@@ -14,6 +14,7 @@
 form {
   max-width: 400px;
   margin: 2rem auto;
+  margin-top: 60px;
   padding: 2rem;
   background: var(--white);
   border-radius: 12px;

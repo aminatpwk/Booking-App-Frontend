@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import {Header} from '../../../../shared/components/header/header';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    Header
   ],
   templateUrl: './register.html',
   styleUrl: './register.css'
