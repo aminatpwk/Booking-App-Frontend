@@ -1,1 +1,42 @@
-<p>header works!</p>
+<header class="app-header">
+  <div class="header-container">
+    <div class="brand-section">
+      <img src="header-icon.png"/>
+      <h1 class="brand-name">BookingBrains</h1>
+    </div>
+
+    @if (title){
+      <div class="title-section">
+        <h2 class="page-title">{{title}}</h2>
+      </div>
+    }
+
+    @if (showNavigation){
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a routerLink="/apartments">Browse</a></li>
+          <li><a routerLink="/bookings">My Bookings</a></li>
+          @if (currentUser?.isOwner){
+            <li><a routerLink="/owner">Manage Properties</a></li>
+          }
+        </ul>
+      </nav>
+    }
+
+    <div class="auth-section">
+      @if (showAuthButtons && !currentUser){
+        <button class="btn-secondary" (click)="onLogin()">Sign In</button>
+        <button class="btn-primary" (click)="onRegister()">Register</button>
+      }
+    </div>
+
+    @if(currentUser){
+      <div class="user-menu">
+        <div class="user-info">
+          <span class="user-name">{{ currentUser.firstName }}</span>
+        </div>
+        <button class="btn-logout" (click)="onLogout()">Logout</button>
+      </div>
+    }
+  </div>
+</header>
