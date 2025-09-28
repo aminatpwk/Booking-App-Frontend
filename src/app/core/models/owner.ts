@@ -1,4 +1,5 @@
 import {Apartment} from './apartment';
+import {UserRegistrationDto} from './user';
 
 export interface Owner{
   id: string;
@@ -6,7 +7,7 @@ export interface Owner{
   identityCardNumber: string;
   bankAccount: string;
   phoneNumber: string;
-  apartments?: Apartment[]; //apartment entity to define later!!
+  apartments?: Apartment[];
 }
 
 export interface OwnerRegistrationDto{
@@ -15,6 +16,12 @@ export interface OwnerRegistrationDto{
   email: string;
   password: string;
   confirmPassword?: string;
+  identityCardNumber: string;
+  bankAccount: string;
+  phoneNumber: string;
+}
+
+export interface CombinedRegistrationDto extends UserRegistrationDto {
   identityCardNumber: string;
   bankAccount: string;
   phoneNumber: string;

@@ -4,46 +4,161 @@
   [showNavigation]="false">
 </app-header>
 
-<form (ngSubmit)="onSubmit()">
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
   <div class="register-form">
+
     <p>
       <label for="user-first-name">First Name</label>
       <input
-        id = "user-first-name"
-        name = "user-first-name"
-        type = "text"/>
+        id="user-first-name"
+        formControlName="firstName"
+        type="text"
+        [class.error]="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched"
+      />
+      @if (registrationForm.get('firstName')?.touched) {
+        @if (registrationForm.get('firstName')?.hasError('required')) {
+          <span class="error-message">First Name is required.</span>
+        } @else if (registrationForm.get('firstName')?.hasError('minlength')) {
+          <span class="error-message">First Name should have at least 3 characters.</span>
+        }
+      }
     </p>
+
     <p>
       <label for="user-last-name">Last Name</label>
       <input
-        id = "user-last-name"
-        name = "user-last-name"
-        type = "text"/>
+        id="user-last-name"
+        formControlName="lastName"
+        type="text"
+        [class.error]="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched"
+      />
+      @if (registrationForm.get('lastName')?.touched) {
+        @if (registrationForm.get('lastName')?.hasError('required')) {
+          <span class="error-message">Last Name is required.</span>
+        } @else if (registrationForm.get('lastName')?.hasError('minlength')) {
+          <span class="error-message">Last Name should have at least 5 characters.</span>
+        }
+      }
     </p>
+
     <p>
       <label for="user-email">E-mail</label>
       <input
-        id = "user-email"
-        name = "user-email"
-        type = "text"/>
+        id="user-email"
+        formControlName="email"
+        type="email"
+        [class.error]="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
+      />
+      @if (registrationForm.get('email')?.touched) {
+        @if (registrationForm.get('email')?.hasError('required')) {
+          <span class="error-message">E-mail is required.</span>
+        } @else if (registrationForm.get('email')?.hasError('email')) {
+          <span class="error-message">E-mail format is not valid.</span>
+        }
+      }
     </p>
+
     <p>
       <label for="user-password">Password</label>
       <input
-        id = "user-password"
-        name = "user-password"
-        type = "password"/>
+        id="user-password"
+        formControlName="password"
+        type="password"
+        [class.error]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+      />
+      @if (registrationForm.get('password')?.touched) {
+        @if (registrationForm.get('password')?.hasError('required')) {
+          <span class="error-message">Password is required.</span>
+        } @else if (registrationForm.get('password')?.hasError('minlength')) {
+          <span class="error-message">Password has to be at least 8 characters long.</span>
+        }
+      }
     </p>
+
     <p>
       <label for="user-confirm-password">Confirm Password</label>
       <input
-        id = "user-confirm-password"
-        name = "user-confirm-password"
-        type = "password"/>
+        id="user-confirm-password"
+        formControlName="confirmPassword"
+        type="password"
+        [class.error]="registrationForm.get('confirmPassword')?.invalid && registrationForm.get('confirmPassword')?.touched || registrationForm.hasError('passwordsDoNotMatch') && registrationForm.get('confirmPassword')?.touched"
+      />
+      @if (registrationForm.get('confirmPassword')?.touched) {
+        @if (registrationForm.get('confirmPassword')?.hasError('required')) {
+          <span class="error-message">Confirm Password field is required.</span>
+        } @else if (registrationForm.hasError('passwordsDoNotMatch') && registrationForm.get('confirmPassword')?.value) {
+          <span class="error-message">Passwords do not match.</span>
+        }
+      }
     </p>
+
+    <p class="form-checkbox-group">
+      <input
+        id="is-owner"
+        formControlName="isOwner"
+        type="checkbox"
+      />
+      <label for="is-owner" class="checkbox-label">Register as Apartment Owner</label>
+    </p>
+
+    @if (isOwnerRegistration){
+      <p>
+        <label for="owner-id-card">Identity Card Number</label>
+        <input
+          id="owner-id-card"
+          formControlName="identityCardNumber"
+          type="text"
+          [class.error]="registrationForm.get('identityCardNumber')?.invalid && registrationForm.get('identityCardNumber')?.touched"
+        />
+        @if (registrationForm.get('identityCardNumber')?.touched) {
+          @if (registrationForm.get('identityCardNumber')?.hasError('required')) {
+            <span class="error-message">Identity card number is required.</span>
+          } @else if (registrationForm.get('identityCardNumber')?.hasError('pattern')) {
+            <span class="error-message">Invalid format. Should be 1 character + 8 digits + 1 character at the end (e.g. A12345678B).</span>
+          }
+        }
+      </p>
+
+      <p>
+        <label for="owner-bank-account">Bank Account</label>
+        <input
+          id="owner-bank-account"
+          formControlName="bankAccount"
+          type="text"
+          [class.error]="registrationForm.get('bankAccount')?.invalid && registrationForm.get('bankAccount')?.touched"
+        />
+        @if (registrationForm.get('bankAccount')?.touched) {
+          @if (registrationForm.get('bankAccount')?.hasError('required')) {
+            <span class="error-message">Bank account number is required.</span>
+          } @else if (registrationForm.get('bankAccount')?.hasError('minlength')) {
+            <span class="error-message">Bank account number should be at least 16 characters long.</span>
+          }
+        }
+      </p>
+
+      <p>
+        <label for="owner-phone">Phone Number</label>
+        <input
+          id="owner-phone"
+          formControlName="phoneNumber"
+          type="tel"
+          [class.error]="registrationForm.get('phoneNumber')?.invalid && registrationForm.get('phoneNumber')?.touched"
+        />
+        @if (registrationForm.get('phoneNumber')?.touched) {
+          @if (registrationForm.get('phoneNumber')?.hasError('required')) {
+            <span class="error-message">Phone number is required.</span>
+          } @else if (registrationForm.get('phoneNumber')?.hasError('pattern')) {
+            <span class="error-message">Phone number is invalid.</span>
+          }
+        }
+      </p>
+    }
   </div>
 
   <p>
-    <button>Register</button>
+    <button type="submit">Register</button>
+  </p>
+  <p class="login-redirect">
+    Already have an account? <a href="">Log in here.</a>
   </p>
 </form>
