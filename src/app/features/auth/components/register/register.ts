@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
 import {Header} from '../../../../shared/components/header/header';
+import {ToastService} from '../../../../core/services/toast.service';
 
 
 @Component({
@@ -13,11 +14,12 @@ import {Header} from '../../../../shared/components/header/header';
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
-export class Register {
+export class Register implements OnInit {
   registrationForm!: FormGroup;
   isOwnerRegistration = false;
+  formSubmitted = false;
 
-  constructor(public formBuilder: FormBuilder) {
+  constructor(public formBuilder: FormBuilder, public toastService: ToastService) {
   }
 
   ngOnInit(){
@@ -73,8 +75,13 @@ export class Register {
   }
 
   onSubmit(){
+    this.formSubmitted = true;
+    this.registrationForm.markAllAsTouched();
     if(this.registrationForm.valid) {
       console.log('Form sent successfully', this.registrationForm.value);
+      this.toastService.showSuccess("Registration was succesfully done!", "Welcome!");
+      this.registrationForm.reset({isOwner: false});
+      this.formSubmitted = false;
     }else{
 
       console.log('Error in the form');

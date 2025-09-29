@@ -156,8 +156,12 @@
   </div>
 
   <p>
+    @if (formSubmitted && registrationForm.invalid){
+      <span class="error-message">Please fill out all the fields!</span>
+    }
     <button type="submit">Register</button>
   </p>
+
   <p class="login-redirect">
     Already have an account? <a href="">Log in here.</a>
   </p>
