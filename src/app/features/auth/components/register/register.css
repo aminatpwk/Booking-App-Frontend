@@ -119,7 +119,7 @@ button {
   transition: all 0.2s ease;
   box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3), 0 2px 4px -2px rgba(59, 130, 246, 0.2); /* Hije më e butë blu */
   min-height: 52px;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 button:hover {

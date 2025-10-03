@@ -1,12 +1,5 @@
-<app-header
-  title="Create Account"
-  [showAuthButtons]="false"
-  [showNavigation]="false">
-</app-header>
-
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
   <div class="register-form">
-
     <p>
       <label for="user-first-name">First Name</label>
       <input
@@ -17,9 +10,9 @@
       />
       @if (registrationForm.get('firstName')?.touched) {
         @if (registrationForm.get('firstName')?.hasError('required')) {
-          <span class="error-message">First Name is required.</span>
+          <span class="error-message">First name is required.</span>
         } @else if (registrationForm.get('firstName')?.hasError('minlength')) {
-          <span class="error-message">First Name should have at least 3 characters.</span>
+          <span class="error-message">First name should have at least 3 characters.</span>
         }
       }
     </p>
@@ -34,9 +27,9 @@
       />
       @if (registrationForm.get('lastName')?.touched) {
         @if (registrationForm.get('lastName')?.hasError('required')) {
-          <span class="error-message">Last Name is required.</span>
+          <span class="error-message">Last name is required.</span>
         } @else if (registrationForm.get('lastName')?.hasError('minlength')) {
-          <span class="error-message">Last Name should have at least 5 characters.</span>
+          <span class="error-message">Last name should have at least 5 characters.</span>
         }
       }
     </p>
@@ -85,20 +78,15 @@
       />
       @if (registrationForm.get('confirmPassword')?.touched) {
         @if (registrationForm.get('confirmPassword')?.hasError('required')) {
-          <span class="error-message">Confirm Password field is required.</span>
+          <span class="error-message">Confirm password field is required.</span>
         } @else if (registrationForm.hasError('passwordsDoNotMatch') && registrationForm.get('confirmPassword')?.value) {
           <span class="error-message">Passwords do not match.</span>
         }
       }
     </p>
 
-    <p class="form-checkbox-group">
-      <input
-        id="is-owner"
-        formControlName="isOwner"
-        type="checkbox"
-      />
-      <label for="is-owner" class="checkbox-label">Register as Apartment Owner</label>
+    <p class="login-redirect">
+      <a href="">Register as an Owner.</a>
     </p>
 
     @if (isOwnerRegistration){

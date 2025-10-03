@@ -14,4 +14,16 @@ export class ToastService {
       positionClass: 'toast-bottom-right'
     });
   }
+
+  showWarning(title: string, message: string){
+    this.toastr.warning(title, message, {
+      positionClass: 'toast-bottom-right'
+    });
+  }
+
+  showError(title: string, message: string){
+    this.toastr.error(title, message, {
+      positionClass: 'toast-bottom-right'
+    });
+  }
 }
