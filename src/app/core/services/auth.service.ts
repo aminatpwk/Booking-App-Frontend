@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 
 const API_BASE_URL = 'https://localhost:7157/api/v1'
 
@@ -8,6 +8,8 @@ const API_BASE_URL = 'https://localhost:7157/api/v1'
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly userRole = 'User';
+
     constructor(private http: HttpClient) {
 
     }
@@ -20,4 +22,28 @@ export class AuthService {
       return this.http.post(`${API_BASE_URL}/Owner`, ownerDto);
     }
 
+    login(credentials: any): Observable<string> {
+      const loginPayload = {
+        ...credentials,
+        role: this.userRole
+      }
+      return this.http.post(`${API_BASE_URL}/User/login`, loginPayload, {responseType: 'text'})
+        .pipe(tap(token => {
+          if(token){
+            localStorage.setItem('token', token);
+          }
+        }));
+    }
+
+    getToken(): string | null {
+      return localStorage.getItem('token');
+    }
+
+    isLoggedIn(): boolean{
+      return !!this.getToken();
+    }
+
+    logOut(): void{
+      localStorage.removeItem('token');
+    }
 }

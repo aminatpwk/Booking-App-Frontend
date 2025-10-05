@@ -1,1 +1,40 @@
-<p>login works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <h2>Booking App platform entry</h2>
+  <div class="login-form">
+    <p>
+      <label for = "user-email">E-mail</label>
+      <input
+        id="user-email"
+        type="email"
+        formControlName="email"
+        />
+      @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']){
+        <span class="error-message">E-mail is required.</span>
+      }
+    </p>
+
+    <p>
+      <label for="user-password">Password</label>
+      <input
+        id="user-password"
+        type="password"
+        formControlName="password"
+        />
+      @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']){
+        <span class="error-message">Password is required.</span>
+      }
+    </p>
+  </div>
+
+  @if (errorMessage){
+    <div class="error-message">
+      {{errorMessage}}
+    </div>
+    }
+
+  <button type="submit">Log In</button>
+
+  <p class="register-redirect">
+    Don't have an account? <a href="/register">Register here.</a>
+  </p>
+</form>
