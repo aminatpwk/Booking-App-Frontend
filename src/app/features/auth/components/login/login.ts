@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {AuthService} from '../../../../core/services/auth.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ToastService} from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +14,11 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 })
 export class Login {
   loginForm!: FormGroup;
-  errorMessage: string | null = null;
 
   constructor(private authService: AuthService,
               private router: Router,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private toastService: ToastService) {
   }
 
   ngOnInit(): void{
@@ -28,18 +29,19 @@ export class Login {
   }
 
   onSubmit(){
-    this.errorMessage = null;
-
     if(this.loginForm.invalid){
       return;
     }
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (token) => {
-        this.router.navigate(['/dashboard']);
+        this.toastService.showSuccess("Success", "You have been successfully logged in!");
+
+        //TODO: navigate to user-specific dashboard
+        this.router.navigate(['/user-dashboard']);
       },
       error: (error) => {
-        this.errorMessage = 'Wrong credentials or server error!'
+        this.toastService.showError("Error", "Wrong credentials or server error!");
       }
     });
   }

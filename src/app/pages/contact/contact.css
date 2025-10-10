@@ -1,0 +1,77 @@
+.contact-page-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px 25px;
+  background-color: #ffffff;
+  line-height: 1.6;
+  font-family: 'Arial', sans-serif;
+}
+
+.contact-page-container h1 {
+  color: rgba(4, 60, 108, 0.94);
+  font-size: 2.5em;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-left: 5px solid rgba(4, 60, 108, 0.94);
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.section h2 {
+  color: #333;
+  font-size: 1.6em;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.section p {
+  color: #555;
+  font-size: 1.1em;
+}
+
+.location-info {
+  border-left: 5px solid rgba(168, 140, 4, 0.7);
+  background-color: #fffbe6;
+}
+
+.creator-info {
+  border-left: 5px solid rgba(30, 108, 4, 0.61);
+  background-color: #e9f5e9;
+  font-style: italic;
+}
+
+.contact-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 15px;
+}
+
+.contact-list li {
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.contact-list li strong {
+  color: rgba(4, 60, 108, 0.94);
+  font-weight: 600;
+  min-width: 120px;
+  display: inline-block;
+}
+
+.map-placeholder {
+  height: 150px;
+  background-color: #e0e0e0;
+  margin-top: 20px;
+  text-align: center;
+  line-height: 150px;
+  color: #666;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}

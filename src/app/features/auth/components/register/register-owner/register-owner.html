@@ -1,0 +1,61 @@
+<form [formGroup]="ownerRegistrationForm" (ngSubmit)="onSubmit()">
+  <h2>Register as Owner</h2>
+  <p>You are already registered as a user. Please fill out necessary details to register as an owner:</p>
+
+  <div class="register-form">
+    <p>
+      <label for="owner-id-card">Identity Card Number</label>
+      <input
+        id="owner-id-card"
+        formControlName="identityCardNumber"
+        type="text"
+        [class.error]="ownerRegistrationForm.get('identityCardNumber')?.invalid && ownerRegistrationForm.get('identityCardNumber')?.touched"
+      />
+      @if (ownerRegistrationForm.get('identityCardNumber')?.touched) {
+        @if (ownerRegistrationForm.get('identityCardNumber')?.hasError('required')) {
+          <span class="error-message">Identity card number is required.</span>
+        } @else if (ownerRegistrationForm.get('identityCardNumber')?.hasError('pattern')) {
+          <span class="error-message">Invalid format. Must be 10 digits and be up to albanian standards.</span>
+        }
+      }
+    </p>
+
+    <p>
+      <label for="owner-bank-account">Bank Account</label>
+      <input
+        id="owner-bank-account"
+        formControlName="bankAccount"
+        type="text"
+        [class.error]="ownerRegistrationForm.get('bankAccount')?.invalid && ownerRegistrationForm.get('bankAccount')?.touched"
+      />
+      @if (ownerRegistrationForm.get('bankAccount')?.touched) {
+        @if (ownerRegistrationForm.get('bankAccount')?.hasError('required')) {
+          <span class="error-message">Bank account number is required.</span>
+        } @else if (ownerRegistrationForm.get('bankAccount')?.hasError('minlength')) {
+          <span class="error-message">Bank account number should be at least 16 characters long.</span>
+        }
+      }
+    </p>
+
+    <p>
+      <label for="owner-phone">Phone Number</label>
+      <input
+        id="owner-phone"
+        formControlName="phoneNumber"
+        type="tel"
+        [class.error]="ownerRegistrationForm.get('phoneNumber')?.invalid && ownerRegistrationForm.get('phoneNumber')?.touched"
+      />
+      @if (ownerRegistrationForm.get('phoneNumber')?.touched) {
+        @if (ownerRegistrationForm.get('phoneNumber')?.hasError('required')) {
+          <span class="error-message">Phone number is required.</span>
+        } @else if (ownerRegistrationForm.get('phoneNumber')?.hasError('pattern')) {
+          <span class="error-message">Phone number is invalid.</span>
+        }
+      }
+    </p>
+  </div>
+
+  <p>
+    <button type="submit">Complete Owner Registration</button>
+  </p>
+</form>
