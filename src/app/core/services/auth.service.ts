@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
+import {Router} from '@angular/router';
 
 const API_BASE_URL = 'https://localhost:7157/api/v1'
 
@@ -10,7 +11,7 @@ const API_BASE_URL = 'https://localhost:7157/api/v1'
 export class AuthService {
   private readonly userRole = 'User';
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private router: Router) {
 
     }
 
@@ -45,5 +46,6 @@ export class AuthService {
 
     logOut(): void{
       localStorage.removeItem('token');
+      this.router.navigate(['/login']);
     }
 }

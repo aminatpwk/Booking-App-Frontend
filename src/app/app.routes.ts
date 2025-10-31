@@ -9,6 +9,7 @@ import {Contact} from './pages/contact/contact';
 import {Policies} from './pages/policies/policies';
 import {Terms} from './pages/terms/terms';
 import {Rights} from './pages/rights/rights';
+import {DashboardOwner} from './features/dashboard/dashboard-owner/dashboard-owner';
 
 export const routes: Routes = [
   //pages routes
@@ -21,5 +22,6 @@ export const routes: Routes = [
   {path: 'register', component: Register},
   {path: 'login', component: Login},
   {path: 'user-dashboard', component:Dashboard, canActivate: [authGuard]},
-  {path: 'register-owner', component: RegisterOwner}
+  {path: 'register-owner', component: RegisterOwner, canActivate: [authGuard]},
+  {path: 'dashboard-owner', component: DashboardOwner, canActivate: [authGuard]}
 ];

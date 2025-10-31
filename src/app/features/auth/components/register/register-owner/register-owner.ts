@@ -46,8 +46,7 @@ export class RegisterOwner {
         }
         this.toastService.showSuccess("Success", "Owner created successfully!");
 
-        //TODO: change into owner specific dashboard here
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/dashboard-owner']);
       },
       error: (error) => {
         const errorMessage = error.error?.message || "Owner registration failed!";

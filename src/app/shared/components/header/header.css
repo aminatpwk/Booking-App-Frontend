@@ -4,9 +4,9 @@
   --light-blue: #dbeafe;
   --white: rgba(4, 60, 108, 0.25);
   --light-grey: #f8fafc;
-  --medium-grey: #64748b;
+  --medium-grey: #faf6f6;
   --dark-grey: #334155;
-  --border-grey: rgba(4, 60, 108, 0.61);
+  --border-grey: rgb(212, 203, 200);
 }
 
 .app-header {
@@ -113,6 +113,9 @@ img {
 
 .auth-section {
   flex-shrink: 0;
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
 }
 
 .auth-buttons {
@@ -135,40 +138,138 @@ img {
   display: inline-block;
 }
 
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.925rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border-radius: 0.65rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 2.75rem;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
-  color: var(--white);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  background: #93c5fd;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.28);
+  border: none;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.38);
+  background: linear-gradient(135deg, #2563eb, var(--dark-blue));
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.99);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.3);
+  outline-offset: 2px;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  width: 0; height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+  pointer-events: none;
+}
+
+.btn-primary:active::after {
+  width: 200px; height: 200px;
 }
 
 .btn-secondary {
-  background: var(--white);
-  color: var(--primary-blue);
-  border-color: var(--primary-blue);
+  background: #346db5;
+  color: #fff;
+  border: 2px solid var(--primary-blue);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
 }
 
 .btn-secondary:hover {
   background: var(--light-blue);
-  transform: translateY(-1px);
+  border-color: #2563eb;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1);
+}
+
+.btn-secondary:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 2px;
 }
 
 .btn-logout {
-  background: transparent;
-  color: var(--medium-grey);
-  border-color: var(--border-grey);
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1f2937;
+  border: 1.5px solid var(--border-grey);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.22s ease-in-out;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1;
+  min-height: 2.25rem;
+  user-select: none;
 }
 
 .btn-logout:hover {
-  background: #fee2e2;
   color: #dc2626;
+  background-color: #fee2e2;
   border-color: #dc2626;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-logout:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-logout:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.btn-logout::before {
+  content: "↗";
+  font-size: 0.9em;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.btn-logout:hover::before {
+  opacity: 1;
 }
 
 .user-menu {

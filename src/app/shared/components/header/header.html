@@ -14,8 +14,10 @@
     @if (showNavigation){
       <nav class="main-nav">
         <ul class="nav-links">
-          <li><a routerLink="/apartments">Browse</a></li>
-          <li><a routerLink="/bookings">My Bookings</a></li>
+          @if (currentUser){
+            <li><a routerLink="/apartments">Browse</a></li>
+            <li><a routerLink="/bookings">My Bookings</a></li>
+          }
           @if (currentUser?.isOwner){
             <li><a routerLink="/owner">Manage Properties</a></li>
           }
@@ -32,10 +34,12 @@
 
     @if(currentUser){
       <div class="user-menu">
+        <button class="icon-btn notification-btn">🔔</button>
         <div class="user-info">
           <span class="user-name">{{ currentUser.firstName }}</span>
         </div>
-        <button class="btn-logout" (click)="onLogout()">Logout</button>
+        <button class="btn-logout" (click)="onLogout()">
+          Logout</button>
       </div>
     }
   </div>

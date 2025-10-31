@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -15,17 +16,21 @@ export class Header {
   @Input() showAuthButtons: boolean = false;
   @Input() currentUser: any = null;
 
-  constructor() { }
+  constructor(private router: Router,  private authService: AuthService) {
+
+  }
 
   onLogin(){
-    //to be implemented
+    this.router.navigateByUrl('/login');
   }
 
   onRegister(){
-    //to be implemented
+    this.router.navigate(['/register']);
   }
 
-  onLogout(){
-    //to be implemented
+  onLogout() {
+    this.authService.logOut();
+    this.currentUser = null;
+    this.router.navigateByUrl('/login');
   }
 }
