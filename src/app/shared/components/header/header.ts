@@ -15,6 +15,7 @@ export class Header {
   @Input() showNavigation: boolean = false;
   @Input() showAuthButtons: boolean = false;
   @Input() currentUser: any = null;
+  isUserMenuOpen = false;
 
   constructor(private router: Router,  private authService: AuthService) {
 
@@ -32,5 +33,15 @@ export class Header {
     this.authService.logOut();
     this.currentUser = null;
     this.router.navigateByUrl('/login');
+    this.isUserMenuOpen = false;
+  }
+
+  toggleUserMenu(){
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  onRegisterAsOwner(){
+    this.isUserMenuOpen = false;
+    this.router.navigate(['/register-owner']);
   }
 }

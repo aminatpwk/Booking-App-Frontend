@@ -1,7 +1,7 @@
 <header class="app-header">
   <div class="header-container">
     <div class="brand-section">
-      <img src="header-icon.png"/>
+      <img src="/headerimages/header-icon.png"/>
       <h1 class="brand-name">BookingBrains</h1>
     </div>
 
@@ -34,12 +34,30 @@
 
     @if(currentUser){
       <div class="user-menu">
-        <button class="icon-btn notification-btn">🔔</button>
+        <button class="icon-btn">
+          <img src="/headerimages/notifications-icon.png"/>
+        </button>
         <div class="user-info">
           <span class="user-name">{{ currentUser.firstName }}</span>
         </div>
-        <button class="btn-logout" (click)="onLogout()">
-          Logout</button>
+        <div class="user-profile-dropdown">
+          <button class="user-avatar-btn" (click)="toggleUserMenu()">
+            <img src="/headerimages/default-avatar.png" alt="User profile" class="user-avatar"/>
+          </button>
+
+          @if (isUserMenuOpen){
+            <div class="dropdown-menu">
+              @if (!currentUser.isOwner){
+                <button class="dropdown-item" (click)="onRegisterAsOwner()">
+                  Register as Owner
+                </button>
+              }
+              <button class="dropdown-item" (click)="onLogout()">
+                Log out
+              </button>
+            </div>
+          }
+        </div>
       </div>
     }
   </div>
