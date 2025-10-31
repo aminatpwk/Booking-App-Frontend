@@ -26,4 +26,10 @@ export class ToastService {
       positionClass: 'toast-bottom-right'
     });
   }
+
+  showInfo(title: string, message: string){
+    this.toastr.info(title, message, {
+      positionClass: 'toast-bottom-right'
+    })
+  }
 }

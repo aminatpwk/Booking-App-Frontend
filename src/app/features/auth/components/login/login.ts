@@ -35,9 +35,8 @@ export class Login {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (token) => {
-        this.toastService.showSuccess("Success", "You have been successfully logged in!");
+        this.toastService.showSuccess("You have been successfully logged in!", "Success");
 
-        //TODO: navigate to user-specific dashboard
         this.router.navigate(['/user-dashboard']);
       },
       error: (error) => {

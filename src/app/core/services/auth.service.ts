@@ -2,8 +2,17 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {Router} from '@angular/router';
+import {jwtDecode} from 'jwt-decode';
 
 const API_BASE_URL = 'https://localhost:7157/api/v1'
+
+interface DecodedToken{
+  userId?: string;
+  role: string;
+  email: string;
+  expirationDate: Date;
+  sub?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +47,37 @@ export class AuthService {
 
     getToken(): string | null {
       return localStorage.getItem('token');
+    }
+
+    getDecodedToken(): DecodedToken | null{
+      const token = this.getToken();
+      if(!token) {
+        return null;
+      }
+
+      try{
+        return jwtDecode<DecodedToken>(token);
+      }catch(error) {
+        return null;
+      }
+    }
+
+    getUserId(): string | null{
+      const decoded = this.getDecodedToken();
+      if(!decoded){
+        return null;
+      }
+
+      return decoded.userId || decoded.sub || decoded.email || null;
+    }
+
+    role(): string{
+      const  decoded = this.getDecodedToken();
+      if(!decoded){
+        return "";
+      }
+
+      return decoded.role;
     }
 
     isLoggedIn(): boolean{

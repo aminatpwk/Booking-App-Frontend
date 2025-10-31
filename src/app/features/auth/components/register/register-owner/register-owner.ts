@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../../../core/services/auth.service';
 import { ToastService } from '../../../../../core/services/toast.service';
@@ -12,8 +12,9 @@ import { Router } from '@angular/router';
   templateUrl: './register-owner.html',
   styleUrl: './register-owner.css'
 })
-export class RegisterOwner {
+export class RegisterOwner implements OnInit {
   ownerRegistrationForm!: FormGroup;
+  userId: string | null = null;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -23,10 +24,42 @@ export class RegisterOwner {
   }
 
   ngOnInit(){
+    this.userId = this.authService.getUserId();
+
+    if(!this.userId){
+      this.toastService.showError('Error', 'User not authenticated. Please login again.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if(this.authService.getUserId() == "Owner"){
+      this.toastService.showInfo('Info', 'You are already registered as an owner.');
+      this.router.navigate(['/dashboard-owner']);
+      return;
+    }
+
     this.ownerRegistrationForm = this.formBuilder.group({
-      identityCardNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      bankAccount: ['', [Validators.required, Validators.minLength(16)]],
-      phoneNumber:['', [Validators.required, Validators.pattern(/^[0-9]{8,15}$/)]]
+      identityCardNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z][0-9]{8}[A-Za-z]$/)
+        ]
+      ],
+      bankAccount: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]{16}$/)
+        ]
+      ],
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^(\+355|0)?[6-9][0-9]{7,8}$/)
+        ]
+      ]
     });
   }
 
@@ -36,15 +69,24 @@ export class RegisterOwner {
       return;
     }
 
-    const payload = this.ownerRegistrationForm.value;
+    if(!this.userId){
+      this.toastService.showError('Error', 'User ID not found. Please login again.');
+      this.router.navigate(['/login']);
+      return;
+    }
 
-    this.authService.registerUser(payload).subscribe({
+    const payload = {
+      userId: this.userId,
+      ...this.ownerRegistrationForm.value
+    };
+
+    this.authService.registerOwner(payload).subscribe({
       next: (response) => {
         const newToken = response.token;
         if(newToken){
           localStorage.setItem('token', newToken);
         }
-        this.toastService.showSuccess("Success", "Owner created successfully!");
+        this.toastService.showSuccess("Owner created successfully!", "Success");
 
         this.router.navigate(['/dashboard-owner']);
       },
