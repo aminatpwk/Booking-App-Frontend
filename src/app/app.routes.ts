@@ -12,6 +12,9 @@ import {Rights} from './pages/rights/rights';
 import {DashboardOwner} from './features/dashboard/dashboard-owner/dashboard-owner';
 
 export const routes: Routes = [
+  //lazy loading on the homepage component
+  {path: '',loadComponent: () => import('./pages/home/home').then(c=>c.Home)},
+
   //pages routes
   {path: 'about-bookingapp', component: About},
   {path: 'contact', component: Contact},

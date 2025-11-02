@@ -1,0 +1,110 @@
+.search-bar-container {
+border: 3px solid #ffb700;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.search-bar-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-field {
+  flex-grow: 1;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #e0e0e0;
+  position: relative;
+  min-height: 60px;
+}
+
+.search-field input, .search-field span {
+  border: none;
+  outline: none;
+  font-size: 16px;
+  flex-grow: 1;
+  padding-left: 10px;
+  background: transparent;
+  color:  #888;
+}
+
+.location-field {
+  flex-grow: 2;
+  .clear-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #888;
+  }
+}
+
+.search-field date-field {
+  flex-grow: 2;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  input {
+    width: 50%;
+    color: transparent;
+  }
+
+  .search-field date-placeholder {
+    position: absolute;
+    left: 45px;
+    pointer-events: none;
+    color: #666;
+  }
+}
+
+
+.guests-field {
+  flex-grow: 1.5;
+  cursor: pointer;
+}
+
+.search-btn {
+  background-color: #0071c2;
+color: white;
+  border: none;
+  padding: 0 30px;
+  height: 80px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 0 6px 6px 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 888px) {
+.search-bar-row {
+  flex-direction: column;
+}
+
+  .search-field {
+    width: 100%;
+    border-right: none;
+    min-height: 65px;
+  }
+  .search-btn {
+    width: 100%;
+    height: 70px;
+    border-radius: 0 0 6px 6px;
+  }
+
+  .search-field date-field {
+    justify-content: flex-start;
+  }
+
+  .search-field date-field input {
+    width: 50%;
+  }
+
+  .search-field date-field .date-placeholder {
+    left: 45px;
+  }
+}

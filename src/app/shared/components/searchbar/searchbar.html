@@ -1,0 +1,50 @@
+<div class="search-bar-container">
+  <form (ngSubmit)="onSearch()">
+    <div class="search-bar-row">
+
+      <div class="search-field location-field">
+        <i class="icon-apartment"></i> <input
+        type="text"
+        placeholder="Location"
+        [(ngModel)]="location"
+        name="location"
+        required
+      />
+        @if (location) {
+          <button class="clear-btn" (click)="clearLocation()" type="button">
+            &times;
+          </button>
+        }
+      </div>
+
+      <div class="search-field date-field">
+        <i class="icon-calendar"></i> <input
+        type="date"
+        [(ngModel)]="checkInDate"
+        name="checkIn"
+        placeholder="Check-in"
+      />
+        —
+        <input
+          type="date"
+          [(ngModel)]="checkOutDate"
+          name="checkOut"
+          placeholder="Check-out"
+        />
+        @if (!checkInDate && !checkOutDate) {
+          <span class="date-placeholder">Check-in date — Check-out date</span>
+        }
+      </div>
+
+      <div class="search-field guests-field">
+        <i class="icon-person"></i> <span>{{ guestCount }}</span>
+        <i class="icon-dropdown"></i>
+      </div>
+
+      <button type="submit" class="search-btn">
+        Search
+      </button>
+
+    </div>
+  </form>
+</div>

@@ -1,0 +1,33 @@
+.hero-section {
+  position: relative;
+  background-color: #003580;
+color: white;
+  padding-bottom: 80px;
+min-height: 250px;
+}
+
+.hero-background {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 0;
+}
+
+.hero-title {
+  font-size: 3em;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 1.5em;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+.search-bar-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  top: 40px;
+  padding: 0 20px;
+}
