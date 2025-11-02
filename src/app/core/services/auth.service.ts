@@ -18,7 +18,7 @@ interface DecodedToken{
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly userRole = 'User';
+    private readonly userRole = 'User';
 
     constructor(private http: HttpClient, private router: Router) {
 

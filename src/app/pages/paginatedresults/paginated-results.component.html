@@ -1,0 +1,83 @@
+<main class="results-page-container">
+
+  <section class="results-header">
+    <h1>Apartments in {{ location || 'Search Area' }}</h1>
+    <p>Viewing {{ totalCount }} results available from {{ checkInDate }} to {{ checkOutDate }}</p>
+    <div class="map-view-toggle">
+      <button>Show on map</button>
+    </div>
+  </section>
+
+  <div class="content-wrapper">
+
+    <section class="results-list-section">
+
+      <div class="sort-toolbar">
+        <span class="count">{{ totalCount }} apartments found</span>
+        <label for="sort-by">Sort By:</label>
+        <select id="sort-by" [(ngModel)]="sortBy">
+          <option value="priceAsc">Price (Lowest first)</option>
+          <option value="priceDesc">Price (Highest first)</option>
+          <option value="ratingDesc">Rating (Highest first)</option>
+        </select>
+      </div>
+
+      <div class="apartment-card-list">
+        @for (apartment of apartments; track apartment.ownerId) {
+          <div class="apartment-card">
+
+            <div class="image-placeholder"></div>
+
+            <div class="details">
+              <h3 class="apartment-name">{{ apartment.name }}</h3>
+              <p class="type-location-line">
+                **{{ apartment.type }}** in {{ apartment.city }}, {{ apartment.country }}
+              </p>
+
+              <div class="key-features">
+                <span>🛌 {{ apartment.bedrooms }} beds</span>
+                <span>🛁 {{ apartment.bathrooms }} baths</span>
+                <span>👥 Max {{ apartment.maxGuests }} guests</span>
+              </div>
+
+              @if (apartment.amenities && apartment.amenities.length > 0) {
+                <p class="amenities-snippet">
+                  Includes: {{getAmenitiesPreview(apartment.amenities)}}
+                </p>
+              }
+
+              @if (!apartment.isAvailable) {
+                <span class="status-badge unavailable">Currently Unavailable</span>
+              } @else if (!apartment.isActive) {
+                <span class="status-badge inactive">Inactive Listing</span>
+              }
+
+            </div>
+
+            <div class="price-action">
+              <div class="price-details">
+                <span class="price">${{ apartment.price }}</span>
+                <span class="price-per-night">per night</span>
+                <span class="cleaning-fee">+$ {{ apartment.cleaningFee }} cleaning fee</span>
+              </div>
+
+              <button class="view-details-btn">View Details</button>
+            </div>
+
+          </div>
+        }
+
+        @empty {
+          <p class="no-results">No apartments found matching your criteria. Try adjusting your filters!</p>
+        }
+      </div>
+
+      <div class="pagination-controls">
+        <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+      </div>
+
+    </section>
+  </div>
+</main>

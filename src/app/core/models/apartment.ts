@@ -9,7 +9,7 @@ export interface Apartment{
   city: string;
   address: string;
   price: number;
-  decription:  string;
+  description:  string;
   cleaningFee: number;
   lastBookedOnUtc?: Date;
   bedrooms: number;
@@ -73,17 +73,15 @@ export interface UpdateApartmentDto extends CreateApartmentDto{
 }
 
 export interface ApartmentSearchDto {
-  country?: string;
-  city?: string;
+  location?: string;
+  checkInDate?: Date;
+  checkOutDate?: Date;
+  pageNumber: number;
+  pageSize: number;
   minPrice?: number;
   maxPrice?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  maxGuests?: number;
-  type?: ApartmentType;
-  amenities?: Amenity[];
-  checkIn?: Date;
-  checkOut?: Date;
+  apartmentType?:string;
+  orderBy?: string;
 }
 
 export class ApartmentHelper {

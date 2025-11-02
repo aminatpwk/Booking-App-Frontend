@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {Footer} from './shared/components/footer/footer';
 import {Header} from './shared/components/header/header';
@@ -12,7 +12,7 @@ const IDLE_TIMEOUT_MS = 300000;
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit{
   headerTitle = '';
   showNavigation = true;
   showAuthButtons = true;

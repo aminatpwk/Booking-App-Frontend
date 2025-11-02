@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-searchbar',
@@ -9,13 +10,13 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './searchbar.html',
   styleUrl: './searchbar.css'
 })
-export class Searchbar {
+export class Searchbar implements OnInit {
   location: string="";
   checkInDate: string="";
   checkOutDate:  string="";
   guestCount: string='3 adults · 0 children · 1 room';
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void{
@@ -23,7 +24,15 @@ export class Searchbar {
   }
 
   onSearch(): void{
-    //TODO: implement logic
+    const searchParams = {
+      location: this.location,
+      checkInDate: this.checkInDate,
+      checkOutDate: this.checkOutDate,
+      pageNumber: 1, //or 0
+      pageSize: 10
+    };
+
+    this.router.navigate(['/results'], {queryParams: searchParams});
   }
 
   clearLocation(): void{

@@ -10,6 +10,7 @@ import {Policies} from './pages/policies/policies';
 import {Terms} from './pages/terms/terms';
 import {Rights} from './pages/rights/rights';
 import {DashboardOwner} from './features/dashboard/dashboard-owner/dashboard-owner';
+import {PaginatedResults} from './pages/paginatedresults/paginated-results.component';
 
 export const routes: Routes = [
   //lazy loading on the homepage component
@@ -26,5 +27,6 @@ export const routes: Routes = [
   {path: 'login', component: Login},
   {path: 'user-dashboard', component:Dashboard, canActivate: [authGuard]},
   {path: 'register-owner', component: RegisterOwner, canActivate: [authGuard]},
-  {path: 'dashboard-owner', component: DashboardOwner, canActivate: [authGuard]}
+  {path: 'dashboard-owner', component: DashboardOwner, canActivate: [authGuard]},
+  {path: 'results', component: PaginatedResults}
 ];
