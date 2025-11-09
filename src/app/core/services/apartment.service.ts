@@ -26,14 +26,19 @@ export class ApartmentService{
    * @returns An observable containing the paged apartment results.
    */
     getApartmentsPaged(query: ApartmentSearchDto): Observable<PagedApartmentResult>{
-      let params = new HttpParams();
-      Object.keys(query).forEach(key => {
-        const value = (query as any)[key];
-        if(value !== undefined && value !== null){
-          params = params.append(key, value.toString());
-        }
-      });
+      let params = new HttpParams()
+        .set('PageIndex', query.pageNumber.toString())
+        .set('PageSize', query.pageSize.toString());
+      if (query.location) {
+        params = params.set('Location', query.location);
+      }
+      if (query.checkInDate) {
+        params = params.set('CheckInDate', query.checkInDate.toString());
+      }
+      if (query.checkOutDate) {
+        params = params.set('CheckOutDate', query.checkOutDate.toString());
+      }
 
-      return this.http.get<PagedApartmentResult>(`${API_BASE_URL}/Apartment/paged`, {params: params});
+    return this.http.get<PagedApartmentResult>(`${API_BASE_URL}/Apartment/paged`, {params});
     }
 }

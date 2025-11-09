@@ -15,7 +15,7 @@
       <div class="sort-toolbar">
         <span class="count">{{ totalCount }} apartments found</span>
         <label for="sort-by">Sort By:</label>
-        <select id="sort-by" [(ngModel)]="sortBy">
+        <select id="sort-by" [(ngModel)]="sortBy" (change) = "onSortChange()">
           <option value="priceAsc">Price (Lowest first)</option>
           <option value="priceDesc">Price (Highest first)</option>
           <option value="ratingDesc">Rating (Highest first)</option>
@@ -23,10 +23,12 @@
       </div>
 
       <div class="apartment-card-list">
-        @for (apartment of apartments; track apartment.ownerId) {
+        @for (apartment of apartments; track apartment.id) {
           <div class="apartment-card">
 
-            <div class="image-placeholder"></div>
+            <div class="image-placeholder">
+              <img [src]="apartment.photos" alt="{{ apartment.name }}" class="apartment-image">
+            </div>
 
             <div class="details">
               <h3 class="apartment-name">{{ apartment.name }}</h3>

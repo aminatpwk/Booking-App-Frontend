@@ -12,6 +12,7 @@ import {CommonModule} from '@angular/common';
     FormsModule,
     CommonModule
   ],
+  standalone: true,
   templateUrl: './paginated-results.component.html',
   styleUrl: './paginated-results.component.css'
 })
@@ -23,6 +24,7 @@ export class PaginatedResults implements OnInit {
   totalCount: number = 0;
   currentPage: number = 1;
   totalPages: number = 1;
+  pageSize: number = 10;
   sortBy: string = 'priceAsc';
 
   constructor(private route: ActivatedRoute, private  apartmentService: ApartmentService, private router: Router) {}
@@ -30,6 +32,7 @@ export class PaginatedResults implements OnInit {
   ngOnInit(): void{
     this.route.queryParams.pipe(
       switchMap(params => {
+        console.log('Query Params:', params);
         this.location = params['location'] || '';
         this.checkInDate = params['checkInDate'] || '';
         this.checkOutDate = params['checkOutDate'] || '';
@@ -40,24 +43,25 @@ export class PaginatedResults implements OnInit {
           location: params['location'] || '',
           checkInDate: params['checkInDate'] || '',
           checkOutDate: params['checkOutDate'] || '',
-          pageNumber: +params['pageNumber'] || 1,
-          pageSize: +params['pageSize'] || 10
+          pageNumber: (+params['pageNumber'] || 1) - 1,
+          pageSize: +params['pageSize'] || this.pageSize
         };
 
         return this.apartmentService.getApartmentsPaged(query);
       })
     ).subscribe(results => {
+      console.log('Results:', results);
       this.apartments = results.data;
       this.totalCount = results.totalCount || results.data.length;
       this.totalPages = results.totalPages;
-      this.currentPage = results.pageNumber;
+      this.currentPage = (results.pageNumber || 0) + 1;
     });
   }
 
   onSortChange(): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { sortBy: this.sortBy, pageNumber: 1 },
+      queryParams: { sortBy: this.sortBy, pageNumber: this.currentPage + 1, pageSize: this.pageSize },
       queryParamsHandling: 'merge'
     });
   }
@@ -66,7 +70,7 @@ export class PaginatedResults implements OnInit {
     if (this.currentPage > 1) {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: { pageNumber: this.currentPage - 1 },
+        queryParams: { pageNumber: this.currentPage + 1, sortBy: this.sortBy, pageSize: this.pageSize },
         queryParamsHandling: 'merge'
       });
     }
@@ -76,7 +80,7 @@ export class PaginatedResults implements OnInit {
     if (this.currentPage < this.totalPages) {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: { pageNumber: this.currentPage + 1 },
+        queryParams: { pageNumber: this.currentPage + 1, pageSize: this.pageSize },
         queryParamsHandling: 'merge'
       });
     }
