@@ -32,6 +32,22 @@
       @if (isLoading){
         <div class = "loading-state">
           <p>Loading apartments...</p>
+          <div class="skeleton-list">
+            @for (item of skeletonItems; track item.id) {
+              <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-details">
+                  <div class="skeleton-line short"></div>
+                  <div class="skeleton-line medium"></div>
+                  <div class="skeleton-line full"></div>
+                  <div class="skeleton-line short"></div>
+                </div>
+                <div class="skeleton-price">
+                  <div class="skeleton-line short"></div>
+                </div>
+              </div>
+            }
+          </div>
         </div>
       }
 
@@ -87,10 +103,6 @@
 
           </div>
         }
-
-        @empty {
-          <p class="no-results">No apartments found matching your criteria. Try adjusting your filters!</p>
-        }
       </div>
 
       @if (totalPages > 1 && !isLoading){
@@ -98,16 +110,6 @@
           <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
           <span>Page {{ currentPage }} of {{ totalPages }}</span>
           <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
-        </div>
-      }
-
-      @if (!isLoading){
-        <div class="pagination-info">
-          <p>
-            Showing {{ (currentPage - 1) * pageSize + 1 }} to
-            {{ Math.min(currentPage * pageSize, totalCount) }} of
-            {{ totalCount }} results
-          </p>
         </div>
       }
     </section>

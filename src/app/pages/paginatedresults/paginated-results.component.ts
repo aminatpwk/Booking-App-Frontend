@@ -19,6 +19,7 @@ import {CommonModule} from '@angular/common';
 export class PaginatedResults implements OnInit, OnDestroy {
   //cleanup
   private destroy$ = new Subject<void>();
+  protected readonly Math = Math;
   apartments: Apartment[] = [];
   location: string = '';
   checkInDate: string = '';
@@ -30,6 +31,14 @@ export class PaginatedResults implements OnInit, OnDestroy {
   sortBy: string = 'priceAsc';
   isLoading: boolean = false;
   errorMessage: string = '';
+  skeletonItems = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+  ];
+
   constructor(private route: ActivatedRoute, private  apartmentService: ApartmentService, private router: Router) {}
 
   ngOnInit(): void{
@@ -136,6 +145,4 @@ export class PaginatedResults implements OnInit, OnDestroy {
     const preview = amenities.slice(0, 3).map(a => a.name).join(', ');
     return amenities.length > 3 ? `${preview}...` : preview;
   }
-
-  protected readonly Math = Math;
 }
