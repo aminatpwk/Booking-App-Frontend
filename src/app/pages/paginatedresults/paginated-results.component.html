@@ -2,7 +2,12 @@
 
   <section class="results-header">
     <h1>Apartments in {{ location || 'Search Area' }}</h1>
-    <p>Viewing {{ totalCount }} results available from {{ checkInDate }} to {{ checkOutDate }}</p>
+    @if (checkInDate && checkOutDate){
+      <p>Viewing {{ totalCount }} results available from {{ checkInDate }} to {{ checkOutDate }}</p>
+    }
+    @if (!checkInDate || !checkOutDate){
+      <p>{{ totalCount }} apartments found</p>
+    }
     <div class="map-view-toggle">
       <button>Show on map</button>
     </div>
@@ -19,9 +24,23 @@
           <option value="priceAsc">Price (Lowest first)</option>
           <option value="priceDesc">Price (Highest first)</option>
           <option value="ratingDesc">Rating (Highest first)</option>
+          <option value="nameAsc">Name (A-Z)</option>
+          <option value="nameDesc">Name (Z-A)</option>
         </select>
       </div>
 
+      @if (isLoading){
+        <div class = "loading-state">
+          <p>Loading apartments...</p>
+        </div>
+      }
+
+      @if(errorMessage && !isLoading){
+        <div class="error-state">
+          <p>{{ errorMessage }}</p>
+          <button type="button" (click)="loadApartments()">Retry</button>
+        </div>
+      }
       <div class="apartment-card-list">
         @for (apartment of apartments; track apartment.id) {
           <div class="apartment-card">
@@ -74,12 +93,23 @@
         }
       </div>
 
-      <div class="pagination-controls">
-        <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
-        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
-      </div>
+      @if (totalPages > 1 && !isLoading){
+        <div class="pagination-controls">
+          <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+          <span>Page {{ currentPage }} of {{ totalPages }}</span>
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+        </div>
+      }
 
+      @if (!isLoading){
+        <div class="pagination-info">
+          <p>
+            Showing {{ (currentPage - 1) * pageSize + 1 }} to
+            {{ Math.min(currentPage * pageSize, totalCount) }} of
+            {{ totalCount }} results
+          </p>
+        </div>
+      }
     </section>
   </div>
 </main>

@@ -74,14 +74,17 @@ export interface UpdateApartmentDto extends CreateApartmentDto{
 
 export interface ApartmentSearchDto {
   location?: string;
-  checkInDate?: Date;
-  checkOutDate?: Date;
-  pageNumber: number;
+  checkInDate?: string;
+  checkOutDate?: string;
   pageSize: number;
   minPrice?: number;
   maxPrice?: number;
   apartmentType?:string;
   orderBy?: string;
+  country?: string;
+  city?: string;
+  searchTerm?: string;
+  pageIndex:  number;
 }
 
 export class ApartmentHelper {
@@ -148,3 +151,5 @@ export interface ApartmentListItemDto {
 export interface UpdateApartmentDto extends CreateApartmentDto {
   id: string;
 }
+
+export type SortOption = 'priceAsc' | 'priceDesc' | 'ratingDesc' | 'nameAsc' | 'nameDesc';

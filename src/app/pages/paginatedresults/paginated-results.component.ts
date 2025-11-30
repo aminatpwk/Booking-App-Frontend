@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Apartment, ApartmentSearchDto} from '../../core/models/apartment';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Apartment, ApartmentSearchDto, SortOption} from '../../core/models/apartment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApartmentService} from '../../core/services/apartment.service';
-import {switchMap} from 'rxjs';
+import {Subject, switchMap, takeUntil} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
@@ -16,7 +16,9 @@ import {CommonModule} from '@angular/common';
   templateUrl: './paginated-results.component.html',
   styleUrl: './paginated-results.component.css'
 })
-export class PaginatedResults implements OnInit {
+export class PaginatedResults implements OnInit, OnDestroy {
+  //cleanup
+  private destroy$ = new Subject<void>();
   apartments: Apartment[] = [];
   location: string = '';
   checkInDate: string = '';
@@ -26,72 +28,114 @@ export class PaginatedResults implements OnInit {
   totalPages: number = 1;
   pageSize: number = 10;
   sortBy: string = 'priceAsc';
-
+  isLoading: boolean = false;
+  errorMessage: string = '';
   constructor(private route: ActivatedRoute, private  apartmentService: ApartmentService, private router: Router) {}
 
   ngOnInit(): void{
-    this.route.queryParams.pipe(
-      switchMap(params => {
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
         console.log('Query Params:', params);
         this.location = params['location'] || '';
         this.checkInDate = params['checkInDate'] || '';
         this.checkOutDate = params['checkOutDate'] || '';
-        this.currentPage = +params['pageNumber'] || 1;
-        this.sortBy = params['sortBy'] || 'priceAsc';
+        const pageFromUrl = params['page'];
+        this.currentPage = pageFromUrl ? +pageFromUrl : 1;
+        this.pageSize = +params['pageSize'] || 10;
+        this.sortBy = (params['sortBy'] || 'priceAsc') as SortOption;
+        this.loadApartments();
+      });
+  }
 
-        const query: ApartmentSearchDto = {
-          location: params['location'] || '',
-          checkInDate: params['checkInDate'] || '',
-          checkOutDate: params['checkOutDate'] || '',
-          pageNumber: (+params['pageNumber'] || 1) - 1,
-          pageSize: +params['pageSize'] || this.pageSize
-        };
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-        return this.apartmentService.getApartmentsPaged(query);
-      })
-    ).subscribe(results => {
-      console.log('Results:', results);
-      this.apartments = results.data;
-      this.totalCount = results.totalCount || results.data.length;
-      this.totalPages = results.totalPages;
-      this.currentPage = (results.pageNumber || 0) + 1;
-    });
+  protected loadApartments(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const query: ApartmentSearchDto = {
+      searchTerm: this.location || undefined,
+      checkInDate: this.checkInDate || undefined,
+      checkOutDate: this.checkOutDate || undefined,
+      pageIndex: this.currentPage - 1,
+      pageSize: this.pageSize,
+      ...this.parseSortOption(this.sortBy)
+    };
+
+    this.apartmentService.getApartmentsPaged(query)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (result) => {
+          console.log('API Response:', result);
+          this.apartments = result.data || [];
+          this.totalCount = result.totalCount;
+          this.totalPages = result.totalPages;
+          this.currentPage = result.pageIndex + 1;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading apartments:', error);
+          this.errorMessage = 'Failed to load apartments. Please try again.';
+          this.isLoading = false;
+          this.apartments = [];
+        }
+      });
+  }
+
+  private parseSortOption(sortOption: string): { sortBy?: string; sortDescending?: boolean } {
+    switch (sortOption) {
+      case 'priceAsc':
+        return { sortBy: 'Price', sortDescending: false };
+      case 'priceDesc':
+        return { sortBy: 'Price', sortDescending: true };
+      case 'ratingDesc':
+        return { sortBy: 'Rating', sortDescending: true };
+      case 'nameAsc':
+        return { sortBy: 'Name', sortDescending: false };
+      case 'nameDesc':
+        return { sortBy: 'Name', sortDescending: true };
+      default:
+        return { sortBy: 'Price', sortDescending: false };
+    }
   }
 
   onSortChange(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sortBy: this.sortBy, pageNumber: this.currentPage + 1, pageSize: this.pageSize },
-      queryParamsHandling: 'merge'
-    });
+    this.updateQueryParams({ sortBy: this.sortBy, page: 1 });
   }
 
   previousPage(): void {
     if (this.currentPage > 1) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { pageNumber: this.currentPage + 1, sortBy: this.sortBy, pageSize: this.pageSize },
-        queryParamsHandling: 'merge'
-      });
+      this.updateQueryParams({ page: this.currentPage - 1 });
     }
   }
 
   nextPage(): void {
+    console.log('Next page clicked. Current:', this.currentPage, 'Total:', this.totalPages);
     if (this.currentPage < this.totalPages) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { pageNumber: this.currentPage + 1, pageSize: this.pageSize },
-        queryParamsHandling: 'merge'
-      });
+      this.updateQueryParams({ page: this.currentPage + 1 });
     }
+  }
+
+  private updateQueryParams(params: any): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: params,
+      queryParamsHandling: 'merge'
+    });
   }
 
   getAmenitiesPreview(amenities: any[]): string {
     if (!amenities || amenities.length === 0) {
-      return '';
+      return 'No amenities listed';
     }
 
     const preview = amenities.slice(0, 3).map(a => a.name).join(', ');
     return amenities.length > 3 ? `${preview}...` : preview;
   }
+
+  protected readonly Math = Math;
 }

@@ -2,10 +2,10 @@ import {Apartment, ApartmentSearchDto} from '../models/apartment';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-
-const API_BASE_URL = 'https://localhost:7157/api/v1'
+import {environment} from '../../environment/environment';
 
 interface PagedApartmentResult{
+  pageIndex: number;
   data: Apartment[];
   pageNumber: number;
   totalPages: number;
@@ -16,7 +16,8 @@ interface PagedApartmentResult{
   providedIn: 'root'
 })
 export class ApartmentService{
-    constructor(private http:  HttpClient) {
+  private apiUrl = environment.apiUrl;
+  constructor(private http:  HttpClient) {
 
     }
 
@@ -27,18 +28,40 @@ export class ApartmentService{
    */
     getApartmentsPaged(query: ApartmentSearchDto): Observable<PagedApartmentResult>{
       let params = new HttpParams()
-        .set('PageIndex', query.pageNumber.toString())
+        .set('PageIndex', query.pageIndex.toString())
         .set('PageSize', query.pageSize.toString());
-      if (query.location) {
-        params = params.set('Location', query.location);
+      if (query.country) {
+        params = params.set('Country', query.country);
+      }
+      if (query.city) {
+        params = params.set('City', query.city);
+      }
+      if (query.searchTerm) {
+        params = params.set('SearchTerm', query.searchTerm);
       }
       if (query.checkInDate) {
-        params = params.set('CheckInDate', query.checkInDate.toString());
+        params = params.set('startDate', query.checkInDate);
       }
       if (query.checkOutDate) {
-        params = params.set('CheckOutDate', query.checkOutDate.toString());
+        params = params.set('endDate', query.checkOutDate);
+      }
+      if (query.minPrice !== undefined && query.minPrice !== null) {
+        params = params.set('MinPrice', query.minPrice.toString());
+      }
+      if (query.maxPrice !== undefined && query.maxPrice !== null) {
+        params = params.set('MaxPrice', query.maxPrice.toString());
       }
 
-    return this.http.get<PagedApartmentResult>(`${API_BASE_URL}/Apartment/paged`, {params});
+    console.log('API Request:', `${this.apiUrl}/Apartment/paged`, params.toString());
+
+    return this.http.get<PagedApartmentResult>(`${this.apiUrl}/Apartment/paged`, {params});
     }
+
+  getApartmentById(id: string): Observable<Apartment> {
+    return this.http.get<Apartment>(`${this.apiUrl}/Apartment/${id}`);
+  }
+
+  getAllApartments(): Observable<Apartment[]> {
+    return this.http.get<Apartment[]>(`${this.apiUrl}/Apartment`);
+  }
 }

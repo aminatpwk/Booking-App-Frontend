@@ -15,6 +15,8 @@ export class Searchbar implements OnInit {
   checkInDate: string="";
   checkOutDate:  string="";
   guestCount: string='3 adults · 0 children · 1 room';
+  pageNumber: number = 0;
+  pageSize: number = 10;
 
   constructor(private router: Router) {
   }
@@ -28,8 +30,8 @@ export class Searchbar implements OnInit {
       location: this.location,
       checkInDate: this.checkInDate,
       checkOutDate: this.checkOutDate,
-      pageNumber: 1, //or 0
-      pageSize: 10
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize
     };
 
     this.router.navigate(['/results'], {queryParams: searchParams});
