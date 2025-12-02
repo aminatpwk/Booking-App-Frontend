@@ -10,6 +10,9 @@
 
 BookingBrains is a full-stack booking platform developed as part of an internship project at 3i Solutions Albania. The frontend leverages the latest Angular features to deliver a responsive, type-safe, and maintainable user experience.
 
+<img width="1854" height="903" alt="image" src="https://github.com/user-attachments/assets/117fabdf-f99e-4c2e-9b5c-27d5600cdfce" />
+
+
 ### Key Features
 
 - **User Authentication & Authorization**: Secure JWT-based authentication with role-based access control (User/Owner)
