@@ -30,6 +30,9 @@ export class App implements OnInit{
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        this.headerTitle = '';
+        this.showNavigation = true;
+        this.showAuthButtons = true;
         if (event.urlAfterRedirects.startsWith('/register')) {
           this.headerTitle = 'Create Account';
           this.showNavigation = false;
@@ -43,6 +46,17 @@ export class App implements OnInit{
           this.showNavigation = false;
           this.showAuthButtons = false;
           this.isUserDashboard = true;
+        } else if(event.urlAfterRedirects.startsWith('/dashboard-owner')){
+          this.headerTitle = '';
+          this.showNavigation = false;
+          this.showAuthButtons = false;
+        } else{
+          this.headerTitle = '';
+          this.showNavigation = true;
+          this.showAuthButtons = !this.authService.isLoggedIn();
+          if(this.authService.isLoggedIn() && !this.currentUser) {
+            this.currentUser = {};
+          }
         }
       }
     });
