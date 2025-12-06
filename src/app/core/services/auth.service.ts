@@ -3,8 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {Router} from '@angular/router';
 import {jwtDecode} from 'jwt-decode';
-
-const API_BASE_URL = 'https://localhost:7157/api/v1'
+import {environment} from '../../environment/environment';
 
 interface DecodedToken{
   userId?: string;
@@ -14,22 +13,28 @@ interface DecodedToken{
   sub?: string;
 }
 
+interface OwnerCheckResponse{
+  hasOwnerProfile: boolean;
+  ownerId?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
     private readonly userRole = 'User';
+    private apiUrl = environment.apiUrl;
 
-    constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {
 
     }
 
     registerUser(userDto: any): Observable<any> {
-      return this.http.post(`${API_BASE_URL}/User/register`, userDto);
+      return this.http.post(`${this.apiUrl}/User/register`, userDto);
     }
 
     registerOwner(ownerDto: any): Observable<any> {
-      return this.http.post(`${API_BASE_URL}/Owner`, ownerDto);
+      return this.http.post(`${this.apiUrl}/Owner`, ownerDto);
     }
 
     login(credentials: any): Observable<string> {
@@ -37,12 +42,16 @@ export class AuthService {
         ...credentials,
         role: this.userRole
       }
-      return this.http.post(`${API_BASE_URL}/User/login`, loginPayload, {responseType: 'text'})
+      return this.http.post(`${this.apiUrl}/User/login`, loginPayload, {responseType: 'text'})
         .pipe(tap(token => {
           if(token){
             localStorage.setItem('token', token);
           }
         }));
+    }
+
+    checkOwnerProfile() : Observable<OwnerCheckResponse> {
+      return this.http.get<OwnerCheckResponse>(`${this.apiUrl}/Owner/check-owner-profile`);
     }
 
     getToken(): string | null {

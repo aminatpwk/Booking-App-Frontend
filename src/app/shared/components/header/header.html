@@ -38,7 +38,7 @@
           <img src="/headerimages/notifications-icon.png"/>
         </button>
         <div class="user-info">
-          <span class="user-name">{{ currentUser.firstName }}</span>
+          <span class="user-name">{{ currentUser.firstName}}</span>
         </div>
         <div class="user-profile-dropdown">
           <button class="user-avatar-btn" (click)="toggleUserMenu()">
@@ -47,7 +47,11 @@
 
           @if (isUserMenuOpen){
             <div class="dropdown-menu">
-              @if (!currentUser.isOwner){
+              @if (currentUser.isOwner){
+                <button class="dropdown-item" (click)="onSwitchToOwner()">
+                  Switch to Owner
+                </button>
+              } @else{
                 <button class="dropdown-item" (click)="onRegisterAsOwner()">
                   Register as Owner
                 </button>

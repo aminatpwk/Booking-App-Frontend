@@ -3,12 +3,13 @@ import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {Footer} from './shared/components/footer/footer';
 import {Header} from './shared/components/header/header';
 import {AuthService} from './core/services/auth.service';
+import {LoadingSpinner} from './shared/components/loading-spinner/loading-spinner';
 
 const IDLE_TIMEOUT_MS = 300000;
 
 @Component({
   selector: 'app-root',
-  imports: [ Footer, Header, RouterOutlet],
+  imports: [Footer, Header, RouterOutlet, LoadingSpinner],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -24,7 +25,7 @@ export class App implements OnInit{
 
   constructor(private router: Router,  private authService: AuthService) {
     if(this.authService.isLoggedIn()) {
-      this.currentUser = {};
+      this.loadUserWithOwnerStatus();
       this.startIdleTimer();
     }
 
@@ -46,18 +47,53 @@ export class App implements OnInit{
           this.showNavigation = false;
           this.showAuthButtons = false;
           this.isUserDashboard = true;
+          if(this.authService.isLoggedIn()) {
+            this.loadUserWithOwnerStatus();
+          }
         } else if(event.urlAfterRedirects.startsWith('/dashboard-owner')){
           this.headerTitle = '';
           this.showNavigation = false;
           this.showAuthButtons = false;
+          if(this.authService.isLoggedIn()) {
+            this.loadUserWithOwnerStatus();
+          }
         } else{
           this.headerTitle = '';
           this.showNavigation = true;
           this.showAuthButtons = !this.authService.isLoggedIn();
-          if(this.authService.isLoggedIn() && !this.currentUser) {
-            this.currentUser = {};
+          if(this.authService.isLoggedIn()) {
+            if (!this.currentUser) {
+              this.loadUserWithOwnerStatus();
+            }
+          } else {
+            this.currentUser = null;
           }
         }
+      }
+    });
+  }
+
+  private loadUserWithOwnerStatus(): void{
+    const userId = this.authService.getUserId();
+    const decodedToken = this.authService.getDecodedToken();
+    this.currentUser = {
+      id: userId,
+      email: decodedToken?.email || '',
+      isOwner: false
+    };
+
+    this.authService.checkOwnerProfile().subscribe({
+      next: (response) => {
+        this.currentUser = {
+          ...this.currentUser,
+          isOwner: response.hasOwnerProfile,
+          ownerId: response.ownerId
+        };
+      },
+      error: (error) => {
+        this.currentUser = {
+          isOwner: false
+        };
       }
     });
   }
