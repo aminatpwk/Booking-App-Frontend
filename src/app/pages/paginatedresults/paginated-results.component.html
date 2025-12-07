@@ -16,7 +16,6 @@
   <div class="content-wrapper">
 
     <section class="results-list-section">
-
       <div class="sort-toolbar">
         <span class="count">{{ totalCount }} apartments found</span>
         <label for="sort-by">Sort By:</label>
@@ -98,7 +97,7 @@
                 <span class="cleaning-fee">+$ {{ apartment.cleaningFee }} cleaning fee</span>
               </div>
 
-              <button class="view-details-btn">View Details</button>
+              <button class="view-details-btn" [routerLink]="['/apartment', apartment.id]">View Details</button>
             </div>
 
           </div>

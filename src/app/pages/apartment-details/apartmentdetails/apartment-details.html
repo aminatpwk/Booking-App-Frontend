@@ -1,0 +1,241 @@
+<div class="apartment-details-container">
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="skeleton-header"></div>
+      <div class="skeleton-gallery"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line"></div>
+      </div>
+    </div>
+  }
+
+  @if (errorMessage() && !isLoading()) {
+    <div class="error-state">
+      <h2>Something went wrong</h2>
+      <p>{{ errorMessage() }}</p>
+      <button class="btn-primary" (click)="goBack()">Go Back</button>
+    </div>
+  }
+
+  @if (apartment() && !isLoading()) {
+    <div class="apartment-content">
+      <header class="apartment-header">
+        <button class="back-btn" (click)="goBack()">
+          <span>←</span> Back to results
+        </button>
+        <div class="header-info">
+          <div class="title-section">
+            <h1>{{ apartment()!.name }}</h1>
+            <div class="meta-info">
+              <span class="rating">
+                @if (reviewCount > 0) {
+                  <span class="review-count">({{ reviewCount }} reviews)</span>
+                }
+              </span>
+              <span class="location"> {{ getFullAddress() }}</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button class="action-btn" (click)="shareApartment()" title="Share">
+              Share
+            </button>
+          </div>
+        </div>
+      </header>
+      <section class="photo-gallery">
+        <div class="main-photo-container">
+          <img
+            [src]="currentPhoto"
+            [alt]="apartment()!.name"
+            class="main-photo"
+          />
+
+          @if (photos.length > 1) {
+            <button class="nav-btn prev-btn" (click)="previousImage()">‹</button>
+            <button class="nav-btn next-btn" (click)="nextImage()">›</button>
+
+            <div class="photo-counter">
+              {{ currentImageIndex() + 1 }} / {{ photos.length }}
+            </div>
+          }
+        </div>
+
+        @if (photos.length > 1) {
+          <div class="thumbnail-strip">
+            @for (photo of photos; track $index) {
+              <img
+                [src]="photo"
+                [alt]="'Photo ' + ($index + 1)"
+                class="thumbnail"
+                [class.active]="currentImageIndex() === $index"
+                (click)="selectImage($index)"
+              />
+            }
+          </div>
+        }
+
+        @if (photos.length > 4) {
+          <button class="show-all-photos-btn" (click)="togglePhotosView()">
+            Show all {{ photos.length }} photos
+          </button>
+        }
+      </section>
+      <div class="details-grid">
+        <div class="details-column">
+          <section class="info-card">
+            <div class="card-header">
+              <h2>{{ getTypeName(apartment()!.type) }}</h2>
+              <div class="property-stats">
+                <span class="stat"> {{ apartment()!.bedrooms }} beds</span>
+                <span class="stat"> {{ apartment()!.bathrooms }} baths</span>
+                <span class="stat"> {{ apartment()!.maxGuests }} guests</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="info-card description-card">
+            <h3>About this place</h3>
+            <p class="description">{{ apartment()!.description }}</p>
+          </section>
+
+          @if (apartment()!.amenities && apartment()!.amenities.length > 0) {
+            <section class="info-card amenities-card">
+              <h3>What this place offers</h3>
+              <div class="amenities-grid">
+                @for (amenity of apartment()!.amenities; track amenity) {
+                  <div class="amenity-item">
+                    <span class="amenity-icon">✓</span>
+                    <span>{{ getAmenityName(amenity) }}</span>
+                  </div>
+                }
+              </div>
+            </section>
+          }
+
+          @if (apartment()!.reviews && apartment()!.reviews!.length > 0) {
+            <section class="info-card reviews-card">
+              <h3>
+               {{ reviewCount }} reviews
+              </h3>
+<!--              TODO: add review listing here later-->
+            </section>
+          }
+        </div>
+
+        <aside class="booking-column">
+          <div class="booking-card">
+            <div class="booking-header">
+              <div class="price-info">
+                <span class="price">{{ formatPrice(apartment()!.price) }}</span>
+                <span class="price-period">per night</span>
+              </div>
+            </div>
+
+            <div class="booking-form">
+              <div class="date-inputs">
+                <div class="date-input">
+                  <label>Check-in</label>
+                  <input type="date" placeholder="Add date" />
+                </div>
+                <div class="date-input">
+                  <label>Check-out</label>
+                  <input type="date" placeholder="Add date" />
+                </div>
+              </div>
+              <div class="guests-input">
+                <label>Guests</label>
+                <input
+                  type="number"
+                  [max]="apartment()!.maxGuests"
+                  min="1"
+                  value="1"
+                  placeholder="Number of guests"
+                />
+              </div>
+              <button class="book-btn" (click)="openBookingModal()">
+                Reserve
+              </button>
+              <p class="booking-note">You won't be charged yet</p>
+            </div>
+
+            <div class="price-breakdown">
+              <div class="price-row">
+                <span>{{ formatPrice(apartment()!.price) }} x 1 night</span>
+                <span>{{ formatPrice(apartment()!.price) }}</span>
+              </div>
+              @if (apartment()!.cleaningFee > 0) {
+                <div class="price-row">
+                  <span>Cleaning fee</span>
+                  <span>{{ formatPrice(apartment()!.cleaningFee) }}</span>
+                </div>
+              }
+              <hr class="divider" />
+              <div class="price-row total">
+                <strong>Total</strong>
+                <strong>{{ formatPrice(apartment()!.price + apartment()!.cleaningFee) }}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="additional-info">
+            <div class="info-item">
+              <span class="info-label">Status:</span>
+              @if (apartment()!.isAvailable && apartment()!.isActive) {
+                <span class="badge available">Available</span>
+              } @else if (!apartment()!.isAvailable) {
+                <span class="badge unavailable">Not Available</span>
+              } @else {
+                <span class="badge inactive">Inactive</span>
+              }
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  }
+
+  @if (isBookingModalOpen()) {
+    <div class="modal-overlay" (click)="closeBookingModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Confirm Your Booking</h2>
+          <button class="close-btn" (click)="closeBookingModal()">×</button>
+        </div>
+
+        <div class="modal-body">
+          <form (submit)="onBookingSubmit($event)">
+            <div class="form-group">
+              <label>Check-in Date</label>
+              <input type="date" required />
+            </div>
+
+            <div class="form-group">
+              <label>Check-out Date</label>
+              <input type="date" required />
+            </div>
+
+            <div class="form-group">
+              <label>Number of Guests</label>
+              <input
+                type="number"
+                [max]="apartment()!.maxGuests"
+                min="1"
+                required
+              />
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn-secondary" (click)="closeBookingModal()">
+                Cancel
+              </button>
+              <button type="submit" class="btn-primary">
+                Confirm Booking
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+</div>

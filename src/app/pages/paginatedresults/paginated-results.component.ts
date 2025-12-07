@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Apartment, ApartmentSearchDto, SortOption} from '../../core/models/apartment';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ApartmentService} from '../../core/services/apartment.service';
 import {Subject, switchMap, takeUntil} from 'rxjs';
 import {FormsModule} from '@angular/forms';
@@ -10,7 +10,8 @@ import {CommonModule} from '@angular/common';
   selector: 'app-results',
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   standalone: true,
   templateUrl: './paginated-results.component.html',
