@@ -6,10 +6,14 @@ import {ApartmentService} from '../../../core/services/apartment.service';
 import {AuthService} from '../../../core/services/auth.service';
 import {ToastService} from '../../../core/services/toast.service';
 import {PhotoHelper} from '../../../core/models/photo';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {BookingCalculation, BookingHelper, CreateBookingDto} from '../../../core/models/booking';
+import {BookingService} from '../../../core/services/booking.service';
 
 @Component({
   selector: 'app-apartmentdetails',
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './apartment-details.html',
   styleUrl: './apartment-details.css'
 })
@@ -21,12 +25,18 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
   currentImageIndex = signal(0);
   showAllPhotos = signal(false);
   isBookingModalOpen = signal(false);
+  isSubmittingBooking = signal(false);
+  bookingCalculation = signal<BookingCalculation | null>(null);
+  bookingForm!: FormGroup;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private apartmentService: ApartmentService,
               private authService: AuthService,
-              private toastService: ToastService) {
+              private toastService: ToastService,
+              private bookingService: BookingService,
+              private formBuilder: FormBuilder) {
+    this.initializeBookingForm();
   }
 
   ngOnInit(): void {
@@ -48,10 +58,46 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
     this.destroy$.complete();
   }
 
+  private initializeBookingForm(): void {
+    const today = new Date().toISOString().split('T')[0];
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+    this.bookingForm = this.formBuilder.group({
+      checkInDate: [today, [Validators.required]],
+      checkOutDate: [tomorrowStr, [Validators.required]],
+      guests: [1, [Validators.required, Validators.min(1)]]
+    });
+    this.bookingForm.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.calculateBookingPrice();
+      });
+  }
+
+  private calculateBookingPrice(): void {
+    const apartment = this.apartment();
+    const formValue = this.bookingForm.value;
+    if (!apartment || !formValue.checkInDate || !formValue.checkOutDate) {
+      this.bookingCalculation.set(null);
+      return;
+    }
+    try {
+      const calculation = BookingHelper.calculateBookingPrice(
+        apartment.price,
+        apartment.cleaningFee,
+        formValue.checkInDate,
+        formValue.checkOutDate
+      );
+      this.bookingCalculation.set(calculation);
+    } catch (error) {
+      this.bookingCalculation.set(null);
+    }
+  }
+
   private loadApartmentDetails(id: string): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
-
     this.apartmentService.getApartmentById(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -113,17 +159,74 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
       });
       return;
     }
+    const apartment = this.apartment();
+    if (!apartment) return;
+    if (!apartment.isAvailable || !apartment.isActive) {
+      this.toastService.showWarning('Unavailable', 'This apartment is not available for booking');
+      return;
+    }
     this.isBookingModalOpen.set(true);
   }
 
   closeBookingModal(): void {
     this.isBookingModalOpen.set(false);
+    this.isSubmittingBooking.set(false);
   }
 
   onBookingSubmit(event: Event): void {
-    event.preventDefault();
-    // TODO: Implement booking logic
-    this.closeBookingModal();
+    if (this.bookingForm.invalid) {
+      this.bookingForm.markAllAsTouched();
+      this.toastService.showWarning('Invalid Form', 'Please fill in all required fields');
+      return;
+    }
+    const formValue = this.bookingForm.value;
+    const apartment = this.apartment();
+    if (!apartment) return;
+    const validationError = BookingHelper.validateBookingDates(
+      formValue.checkInDate,
+      formValue.checkOutDate
+    );
+    if (validationError) {
+      this.toastService.showError('Invalid Dates', validationError);
+      return;
+    }
+    if (formValue.guests > apartment.maxGuests) {
+      this.toastService.showError(
+        'Too Many Guests',
+        `This apartment accommodates a maximum of ${apartment.maxGuests} guests`
+      );
+      return;
+    }
+    this.submitBooking();
+  }
+
+  private submitBooking(): void {
+    this.isSubmittingBooking.set(true);
+    const apartment = this.apartment();
+    const formValue = this.bookingForm.value;
+    if (!apartment) return;
+    const bookingDto: CreateBookingDto = {
+      apartmentId: apartment.id,
+      start: new Date(formValue.checkInDate).toISOString(),
+      end: new Date(formValue.checkOutDate).toISOString()
+    };
+    this.bookingService.createBooking(bookingDto)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (bookingId) => {
+          this.toastService.showSuccess(
+            'Booking Created',
+            'Please check your email to confirm your booking'
+          );
+          this.closeBookingModal();
+          this.router.navigate(['/user-dashboard']);
+        },
+        error: (error) => {
+          this.isSubmittingBooking.set(false);
+          const errorMessage = error.error?.message || 'Failed to create booking. Please try again.';
+          this.toastService.showError('Booking Failed', errorMessage);
+        }
+      });
   }
 
   getAmenityName(amenity: Amenity): string {

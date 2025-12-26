@@ -31,6 +31,15 @@ export interface CreateBookingDto{
   end: Date | string;
 }
 
+export interface BookingCalculation {
+  numberOfNights: number;
+  pricePerNight: number;
+  priceForPeriod: number;
+  cleaningFee: number;
+  amenitiesUpCharge: number;
+  totalPrice: number;
+}
+
 export class BookingHelper{
   static getStatusDisplayName(status: BookingStatus): string {
     const statusNames: Record<BookingStatus, string> = {
@@ -81,6 +90,22 @@ export class BookingHelper{
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 
+  static calculateBookingPrice(pricePerNight: number, cleaningFee: number, start: Date | string, end: Date | string): BookingCalculation{
+    const nights = this.calculateNights(start, end);
+    const priceForPeriod = nights * pricePerNight;
+    const amenitiesUpCharge = 0;
+    const totalPrice = priceForPeriod + cleaningFee + amenitiesUpCharge;
+
+    return {
+      numberOfNights: nights,
+      pricePerNight,
+      priceForPeriod,
+      cleaningFee,
+      amenitiesUpCharge,
+      totalPrice
+    };
+  }
+
   static formatPrice(price: number, currency: string = 'USD'): string {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -99,5 +124,27 @@ export class BookingHelper{
   static isCurrentDate(booking: Booking): boolean {
     const now = new Date();
     return new Date(booking.start) <= now && new Date(booking.end) >= now;
+  }
+
+  static validateBookingDates(start: Date | string, end: Date | string): string | null{
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (startDate < today) {
+      return 'Check-in date cannot be in the past';
+    }
+
+    if (endDate <= startDate) {
+      return 'Check-out date must be after check-in date';
+    }
+
+    const nights = this.calculateNights(start, end);
+    if (nights < 1) {
+      return 'Minimum stay is 1 night';
+    }
+
+    return null;
   }
 }
