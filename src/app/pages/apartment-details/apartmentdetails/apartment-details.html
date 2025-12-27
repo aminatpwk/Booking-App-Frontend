@@ -51,11 +51,9 @@
             [alt]="apartment()!.name"
             class="main-photo"
           />
-
           @if (photos.length > 1) {
             <button class="nav-btn prev-btn" (click)="previousImage()">‹</button>
             <button class="nav-btn next-btn" (click)="nextImage()">›</button>
-
             <div class="photo-counter">
               {{ currentImageIndex() + 1 }} / {{ photos.length }}
             </div>
@@ -133,36 +131,37 @@
               </div>
             </div>
 
-            <div class="booking-form">
+            <form [formGroup]="bookingForm" class="booking-form">
               <div class="date-inputs">
                 <div class="date-input">
-                  <label>Check-in</label>
-                  <input type="date" placeholder="Add date" />
+                  <label for="checkInDate">Check-in</label>
+                  <input type="date" placeholder="Add date" id="checkInDate" formControlName="checkInDate"/>
                 </div>
                 <div class="date-input">
-                  <label>Check-out</label>
-                  <input type="date" placeholder="Add date" />
+                  <label for="checkOutDate">Check-out</label>
+                  <input type="date" placeholder="Add date" formControlName="checkOutDate"/>
                 </div>
               </div>
               <div class="guests-input">
                 <label>Guests</label>
-                <input
-                  type="number"
-                  [max]="apartment()!.maxGuests"
-                  min="1"
-                  value="1"
-                  placeholder="Number of guests"
-                />
+                <input type="number" [max]="apartment()!.maxGuests" min="1" placeholder="Number of guests" id="guests" formControlName="guests"/>
+                <small class="input-hint">Maximum {{ apartment()!.maxGuests }} guests</small>
               </div>
-              <button class="book-btn" (click)="openBookingModal()">
-                Reserve
+              <button class="book-btn" (click)="openBookingModal()" [disabled]="!apartment()!.isAvailable || !apartment()!.isActive">
+                @if (apartment()!.isAvailable && apartment()!.isActive) {
+                  Reserve
+                } @else {
+                  Not Available
+                }
               </button>
-              <p class="booking-note">You won't be charged yet</p>
-            </div>
+              @if (apartment()!.isAvailable && apartment()!.isActive) {
+                <p class="booking-note">You won't be charged yet</p>
+              }
+            </form>
 
             <div class="price-breakdown">
               <div class="price-row">
-                <span>{{ formatPrice(apartment()!.price) }} x 1 night</span>
+                <span>{{ formatPrice(apartment()!.price) }} × {{ bookingCalculation()!.numberOfNights }} nights</span>
                 <span>{{ formatPrice(apartment()!.price) }}</span>
               </div>
               @if (apartment()!.cleaningFee > 0) {
@@ -204,36 +203,68 @@
         </div>
 
         <div class="modal-body">
-          <form (submit)="onBookingSubmit($event)">
-            <div class="form-group">
-              <label>Check-in Date</label>
-              <input type="date" required />
+          <div class="booking-summary">
+            <h3>{{apartment()!.name}}</h3>
+            <p class="summary-location">{{getFullAddress()}}</p>
+
+            <div class="summary-details">
+              <div class="summary-row">
+                <span class="label">Check-in:</span>
+                <span class="value">{{ bookingForm.get('checkInDate')?.value | date: 'mediumDate' }}</span>
+              </div>
+              <div class="summary-row">
+                <span class="label">Check-out:</span>
+                <span class="value">{{ bookingForm.get('checkOutDate')?.value | date: 'mediumDate' }}</span>
+              </div>
+              <div class="summary-row">
+                <span class="label">Guests:</span>
+                <span class="value">{{ bookingForm.get('guests')?.value }}</span>
+              </div>
+              @if (bookingCalculation()) {
+                <div class="summary-row">
+                  <span class="label">Nights:</span>
+                  <span class="value">{{ bookingCalculation()!.numberOfNights }}</span>
+                </div>
+              }
             </div>
 
-            <div class="form-group">
-              <label>Check-out Date</label>
-              <input type="date" required />
-            </div>
+            @if (bookingCalculation()) {
+              <div class="summary-price-breakdown">
+                <h4>Price Breakdown</h4>
+                <div class="summary-row">
+                  <span>{{ formatPrice(apartment()!.price) }} × {{ bookingCalculation()!.numberOfNights }} nights</span>
+                  <span>{{ formatPrice(bookingCalculation()!.priceForPeriod) }}</span>
+                </div>
+                @if (apartment()!.cleaningFee > 0) {
+                  <div class="summary-row">
+                    <span>Cleaning fee</span>
+                    <span>{{ formatPrice(apartment()!.cleaningFee) }}</span>
+                  </div>
+                }
+                <hr />
+                <div class="summary-row total">
+                  <strong>Total</strong>
+                  <strong>{{ formatPrice(bookingCalculation()!.totalPrice) }}</strong>
+                </div>
+              </div>
+            }
 
-            <div class="form-group">
-              <label>Number of Guests</label>
-              <input
-                type="number"
-                [max]="apartment()!.maxGuests"
-                min="1"
-                required
-              />
+            <div class="confirmation-notice">
+              <p> After confirming, you'll receive an email with booking details and payment instructions.</p>
             </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn-secondary" (click)="closeBookingModal()">
-                Cancel
-              </button>
-              <button type="submit" class="btn-primary">
-                Confirm Booking
-              </button>
-            </div>
-          </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" (click)="closeBookingModal()" [disabled]="isSubmittingBooking()">
+              Cancel
+            </button>
+            <button type="submit" class="btn-primary" (click)="onBookingSubmit()" [disabled]="isSubmittingBooking()">
+              @if (isSubmittingBooking()) {
+                <span>Processing...</span>
+              } @else {
+                <span>Confirm Booking</span>
+              }
+            </button>
+          </div>
         </div>
       </div>
     </div>

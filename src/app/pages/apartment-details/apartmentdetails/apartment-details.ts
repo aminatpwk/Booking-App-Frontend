@@ -173,7 +173,7 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
     this.isSubmittingBooking.set(false);
   }
 
-  onBookingSubmit(event: Event): void {
+  onBookingSubmit(): void {
     if (this.bookingForm.invalid) {
       this.bookingForm.markAllAsTouched();
       this.toastService.showWarning('Invalid Form', 'Please fill in all required fields');
