@@ -22,7 +22,6 @@ interface OwnerCheckResponse{
   providedIn: 'root'
 })
 export class AuthService {
-    private readonly userRole = 'User';
     private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) {
@@ -37,10 +36,10 @@ export class AuthService {
       return this.http.post(`${this.apiUrl}/Owner`, ownerDto);
     }
 
-    login(credentials: any): Observable<string> {
+    login(credentials: any, role: string = 'User'): Observable<string> {
       const loginPayload = {
         ...credentials,
-        role: this.userRole
+        role: role
       }
       return this.http.post(`${this.apiUrl}/User/login`, loginPayload, {responseType: 'text'})
         .pipe(tap(token => {

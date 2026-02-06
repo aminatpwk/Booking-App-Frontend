@@ -1,5 +1,29 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <h2>Booking App platform entry</h2>
+
+  <div class="role-selector">
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="User"
+        [(ngModel)]="selectedRole"
+        [ngModelOptions]="{standalone: true}"
+      />
+      Login as User
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="Owner"
+        [(ngModel)]="selectedRole"
+        [ngModelOptions]="{standalone: true}"
+      />
+      Login as Owner
+    </label>
+  </div>
+
   <div class="login-form">
     <p>
       <label for = "user-email">E-mail</label>

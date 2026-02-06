@@ -1,22 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../../core/services/auth.service';
-import {Router} from '@angular/router';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router, ActivatedRoute} from '@angular/router';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ToastService} from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-login',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login implements OnInit {
   loginForm!: FormGroup;
+  selectedRole: string = 'User';
 
   constructor(private authService: AuthService,
               private router: Router,
+              private route: ActivatedRoute,
               private fb: FormBuilder,
               private toastService: ToastService) {
   }
@@ -26,6 +29,12 @@ export class Login implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password:  ['', [Validators.required]]
     });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['role'] === 'owner') {
+        this.selectedRole = 'Owner';
+      }
+    });
   }
 
   onSubmit(){
@@ -33,11 +42,14 @@ export class Login implements OnInit {
       return;
     }
 
-    this.authService.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.value, this.selectedRole).subscribe({
       next: (token) => {
         this.toastService.showSuccess("You have been successfully logged in!", "Success");
-
-        this.router.navigate(['/user-dashboard']);
+        if (this.selectedRole === 'Owner') {
+          this.router.navigate(['/dashboard-owner']);
+        } else {
+          this.router.navigate(['/user-dashboard']);
+        }
       },
       error: (error) => {
         this.toastService.showError("Error", "Wrong credentials or server error!");
