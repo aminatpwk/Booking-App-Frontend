@@ -126,8 +126,7 @@ img {
 }
 
 .btn-primary,
-.btn-secondary,
-.btn-logout {
+.btn-secondary{
   padding: 0.6rem 1.25rem;
   border-radius: 8px;
   font-weight: 600;

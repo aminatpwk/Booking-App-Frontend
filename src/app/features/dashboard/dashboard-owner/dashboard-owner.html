@@ -1,1 +1,58 @@
-<p>dashboard-owner works!</p>
+<div class="owner-dashboard-container">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a
+        class="nav-item"
+        [class.active]="activeSection === 'overview'"
+        (click)="setActiveSection('overview')"
+      >
+        <span class="nav-text">Dashboard</span>
+      </a>
+
+      <a
+        class="nav-item"
+        [class.active]="activeSection === 'apartments'"
+        (click)="setActiveSection('apartments')"
+      >
+        <span class="nav-text">My Apartments</span>
+      </a>
+
+      <a
+        class="nav-item"
+        [class.active]="activeSection === 'bookings'"
+        (click)="setActiveSection('bookings')"
+      >
+        <span class="nav-text">Bookings</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-header">
+      <h1>{{ getSectionTitle() }}</h1>
+    </div>
+
+    <div class="content-body">
+      @switch (activeSection) {
+        @case ('overview') {
+          <div class="section-content">
+            <h2>Dashboard Overview</h2>
+            <p>Welcome to your owner dashboard!</p>
+          </div>
+        }
+        @case ('apartments') {
+          <div class="section-content">
+            <h2>Manage Apartments</h2>
+            <p>Your apartments will be listed here.</p>
+          </div>
+        }
+        @case ('bookings') {
+          <div class="section-content">
+            <h2>Manage Bookings</h2>
+            <p>Your bookings will be listed here.</p>
+          </div>
+        }
+      }
+    </div>
+  </main>
+</div>

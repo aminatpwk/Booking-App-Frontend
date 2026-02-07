@@ -3,13 +3,12 @@ import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {Footer} from './shared/components/footer/footer';
 import {Header} from './shared/components/header/header';
 import {AuthService} from './core/services/auth.service';
-import {LoadingSpinner} from './shared/components/loading-spinner/loading-spinner';
 
 const IDLE_TIMEOUT_MS = 300000;
 
 @Component({
   selector: 'app-root',
-  imports: [Footer, Header, RouterOutlet, LoadingSpinner],
+  imports: [Footer, Header, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -22,10 +21,11 @@ export class App implements OnInit{
   protected readonly title = signal('Booking-App-Frontend');
   private timeoutId: any;
   private eventListener!: () => void;
+  hideFooter = false;
 
   constructor(private router: Router,  private authService: AuthService) {
     if(this.authService.isLoggedIn()) {
-      this.loadUserWithOwnerStatus();
+      // this.loadUserWithOwnerStatus();
       this.startIdleTimer();
     }
 
@@ -48,22 +48,23 @@ export class App implements OnInit{
           this.showAuthButtons = false;
           this.isUserDashboard = true;
           if(this.authService.isLoggedIn()) {
-            this.loadUserWithOwnerStatus();
+            // this.loadUserWithOwnerStatus();
           }
         } else if(event.urlAfterRedirects.startsWith('/dashboard-owner')){
           this.headerTitle = '';
           this.showNavigation = false;
           this.showAuthButtons = false;
-          if(this.authService.isLoggedIn()) {
-            this.loadUserWithOwnerStatus();
-          }
+          this.hideFooter = true;
+          // if(this.authService.isLoggedIn()) {
+          //   this.loadUserWithOwnerStatus();
+          // }
         } else{
           this.headerTitle = '';
           this.showNavigation = true;
           this.showAuthButtons = !this.authService.isLoggedIn();
           if(this.authService.isLoggedIn()) {
             if (!this.currentUser) {
-              this.loadUserWithOwnerStatus();
+              // this.loadUserWithOwnerStatus();
             }
           } else {
             this.currentUser = null;

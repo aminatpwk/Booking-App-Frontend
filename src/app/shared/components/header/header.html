@@ -34,16 +34,16 @@
 
     @if(currentUser){
       <div class="user-menu">
-        <button class="icon-btn">
-          <img src="/headerimages/notifications-icon.png"/>
-        </button>
-        <div class="user-info">
-          <span class="user-name">{{ currentUser.firstName}}</span>
-        </div>
-        <div class="user-profile-dropdown">
-          <button class="user-avatar-btn" (click)="toggleUserMenu()">
-            <img src="/headerimages/default-avatar.png" alt="User profile" class="user-avatar"/>
-          </button>
+<!--        <button class="icon-btn">-->
+<!--          <img src="/headerimages/notifications-icon.png"/>-->
+<!--        </button>-->
+<!--        <div class="user-info">-->
+<!--          <span class="user-name">{{ currentUser.firstName}}</span>-->
+<!--        </div>-->
+<!--        <div class="user-profile-dropdown">-->
+<!--          <button class="user-avatar-btn" (click)="toggleUserMenu()">-->
+<!--            <img src="/headerimages/default-avatar.png" alt="User profile" class="user-avatar"/>-->
+<!--          </button>-->
 
           @if (isUserMenuOpen){
             <div class="dropdown-menu">
@@ -56,13 +56,17 @@
                   Register as Owner
                 </button>
               }
-              <button class="dropdown-item" (click)="onLogout()">
-                Log out
-              </button>
             </div>
           }
         </div>
-      </div>
+<!--      </div>-->
+
+  <!--    vendos ne dropdown item ne fund-->
+      <button (click)="onLogout()">
+        Log out
+      </button>
     }
+
+
   </div>
 </header>
