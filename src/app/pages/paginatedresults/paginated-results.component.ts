@@ -146,4 +146,39 @@ export class PaginatedResults implements OnInit, OnDestroy {
     const preview = amenities.slice(0, 3).map(a => a.name).join(', ');
     return amenities.length > 3 ? `${preview}...` : preview;
   }
+
+  formatPrice(price: number): string {
+    return price.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+  }
+
+  calculateTax(price: number): string {
+    const tax = Math.round(price * 0.13245);
+    return tax.toLocaleString('en-US');
+  }
+
+  calculateNights(): number {
+    if (!this.checkInDate || !this.checkOutDate) return 2;
+
+    const start = new Date(this.checkInDate);
+    const end = new Date(this.checkOutDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays || 2;
+  }
+
+  getRatingLabel(rating: number): string {
+    if (rating >= 9.0) return 'Wonderful';
+    if (rating >= 8.0) return 'Very Good';
+    if (rating >= 7.0) return 'Good';
+    if (rating >= 6.0) return 'Pleasant';
+    return 'Satisfactory';
+  }
+
+  navigateToDetails(apartmentId: string): void {
+    this.router.navigate(['/apartment', apartmentId]);
+  }
 }

@@ -14,377 +14,200 @@
   --transition: all 0.2s ease;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #fff;
-  color: var(--text-primary);
-  line-height: 1.6;
-}
-.results-header {
-  background: white;
-  padding: 2rem 1.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 2rem;
-  border: 1px solid #e2e8f0;
-  position: relative;
-  overflow: hidden;
-}
-
-.results-header::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
+.results-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 .results-header h1 {
-  font-size: 2rem;
+  font-size: 24px;
   font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
+  margin-bottom: 4px;
 }
 
 .results-header p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin: 0.5rem 0 1.5rem;
-  font-weight: 500;
-}
-
-.map-view-toggle {
-  margin-top: 1rem;
+  color: #555;
+  font-size: 14px;
 }
 
 .map-view-toggle button {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  color: white;
-  border: none;
-  padding: 0.85rem 1.8rem;
-  border-radius: 12px;
+  margin-top: 12px;
+  background: #fff;
+  border: 1px solid #0071c2;
+  color: #0071c2;
+  padding: 8px 14px;
+  border-radius: 6px;
   font-weight: 600;
-  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(30, 41, 59, 0.25);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.map-view-toggle button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(30, 41, 59, 0.35);
-  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-}
-.map-view-toggle button:active {
-  transform: translateY(-1px);
 }
 
 .sort-toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1.5rem;
-  background: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 2rem;
-  border: 1px solid #e2e8f0;
-  flex-wrap: wrap;
-  gap: 1rem;
+  justify-content: space-between;
+  margin: 24px 0 12px;
 }
 
-.sort-toolbar label {
+.sort-toolbar span {
   font-weight: 600;
-  color: #334155;
-  margin-right: 0.75rem;
-  font-size: 0.95rem;
 }
 
-#sort-by {
-  padding: 0.75rem 1.25rem;
-  border: 2px solid #cbd5e1;
-  border-radius: 10px;
-  background-color: white;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #1e293b;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 220px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  appearance: none;
-  padding-right: 2.5rem;
-}
-
-#sort-by:hover {
-  border-color: #94a3b8;
-}
-
-
-@media (max-width: 768px) {
-  .results-header {
-    padding: 1.5rem 1rem;
-    text-align: center;
-  }
-
-  .results-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .map-view-toggle {
-    justify-content: center;
-  }
-
-  .sort-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-    padding: 1.5rem 1rem;
-  }
-
-  .sort-toolbar .count {
-    order: -1;
-    margin-bottom: 1rem;
-  }
-
-}
-
-#sort-by {
-  min-width: 100%;
+.sort-toolbar select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
 .apartment-card-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 16px;
 }
 
 .apartment-card {
-  display: flex;
-  background: white;
-  border: 1px solid #1e293b;
-  border-radius: var(--border-radius);
+  display: grid;
+  grid-template-columns: 260px 1fr 220px;
+  background: #fff;
+  border-radius: 10px;
   overflow: hidden;
-  transition: var(--transition);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
-
-.apartment-card:hover {box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);transform: translateY(-2px);}
 
 .image-placeholder {
-  width: 260px;
-  min-height: 180px;
-  background: linear-gradient(135deg, #0d2161, #334155);
-  background-size: cover;
-  background-position: center;
-  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-.image-placeholder::after {
-  content: "📍";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.5rem;
-  color: rgba(0, 0, 0, 0.15);
+.apartment-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .details {
-  flex: 1;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  padding: 16px 18px;
 }
 
 .apartment-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--dark-grey);
-  margin: 0;
+  color: #0071c2;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
-.type-location-line {color: var(--text-secondary);font-size: 0.95rem;}
-.type-location-line strong {font-weight: 600;color: var(--dark-grey);}
+.apartment-name:hover {
+  color: #000709;
+}
+
+.type-location-line {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
 
 .key-features {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-
-.key-features span {
-  font-size: 0.875rem;
-  color: var(--text-primary);
-  background-color: rgba(225, 225, 225, 0.89);
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  font-weight: 500;
+  gap: 12px;
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 8px;
 }
 
 .amenities-snippet {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin-top: 0.25rem;
+  font-size: 13px;
+  color: #2a7a2a;
 }
 
 .status-badge {
-  align-self: flex-start;
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.status-badge.unavailable {background-color: #991b1b;color: #fff;}
-.status-badge.inactive {background-color: #92400e;color: #fff;}
+.status-badge.unavailable {
+  background: #ffe0e0;
+  color: #a30000;
+}
+
+.status-badge.inactive {
+  background: #f0f0f0;
+  color: #777;
+}
 
 .price-action {
-  padding: 1.25rem;
+  border-left: 1px solid #eee;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-end;
-  min-width: 180px;
-  border-left: 1px solid #888;
+  text-align: right;
 }
 
-.price-details {text-align: right;}
+.price-details {
+  margin-bottom: 12px;
+}
 
 .price {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--dark-grey);
+  font-size: 22px;
+  font-weight: 800;
+  color: #000;
 }
 
 .price-per-night {
   display: block;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-top: -4px;
+  font-size: 13px;
+  color: #555;
 }
 
 .cleaning-fee {
   display: block;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-top: 0.25rem;
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
 }
 
 .view-details-btn {
-  background-color: #1e293b;
-  color: white;
+  background: #0071c2;
+  color: #fff;
   border: none;
-  padding: 0.75rem 1.25rem;
   border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  margin-top: 1rem;
-  transition: var(--transition);
-  width: 100%;
+  transition: background 0.2s ease;
 }
 
-.view-details-btn:hover {background-color: rgba(29, 78, 216, 0.5);transform: translateY(-1px);}
+.view-details-btn:hover {
+  background: #005fa3;
+}
+
+.view-details-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
 .pagination-controls {
+  margin-top: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-grey);
+  gap: 12px;
 }
 
 .pagination-controls button {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border-grey);
-  background-color: #444444;
-  color: rgba(200, 200, 200, 0.89);
-  border-radius: 8px;
-  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
   cursor: pointer;
-  transition: var(--transition);
-}
-
-.pagination-controls button:hover:not(:disabled) {background-color: #737373;border-color: var(--dark-blue);}
-
-.pagination-controls button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background-color: #d5e5ed;
-}
-
-.pagination-controls span {
-  font-weight: 600;
-  color: var(--dark-grey);
-}
-
-@media (max-width: 992px) {
-  .content-wrapper {
-    flex-direction: column;
-  }
-
-  .apartment-card {
-    flex-direction: column;
-  }
-
-  .image-placeholder {
-    width: 100%;
-    height: 200px;
-  }
-
-  .price-action {
-    border-left: none;
-    border-top: 1px solid var(--border-grey);
-    padding-top: 1rem;
-    align-items: stretch;
-  }
-
-  .price-details {
-    text-align: left;
-  }
-
-  .view-details-btn {
-    margin-top: 0.75rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .results-page-container {
-    padding: 1rem;
-  }
-
-  .sort-toolbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .sort-toolbar select {
-    width: 100%;
-  }
-
-  .key-features {
-    gap: 0.5rem;
-  }
 }
 
 .loading-state {
@@ -471,11 +294,6 @@ body {
   100% { background-position: -200% 0; }
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
 .error-state {
   display: flex;
   flex-direction: column;
@@ -484,8 +302,6 @@ body {
   min-height: 50vh;
   padding: 4rem 2rem;
   text-align: center;
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  border: 1px solid #fecaca;
   border-radius: var(--border-radius);
   margin: 2rem 0;
   color: #991b1b;

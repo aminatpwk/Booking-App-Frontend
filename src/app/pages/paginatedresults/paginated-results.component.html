@@ -18,7 +18,6 @@
     <section class="results-list-section">
       <div class="sort-toolbar">
         <span class="count">{{ totalCount }} apartments found</span>
-        <label for="sort-by">Sort By:</label>
         <select id="sort-by" [(ngModel)]="sortBy" (change) = "onSortChange()">
           <option value="priceAsc">Price (Lowest first)</option>
           <option value="priceDesc">Price (Highest first)</option>
@@ -41,7 +40,7 @@
                   <div class="skeleton-line full"></div>
                   <div class="skeleton-line short"></div>
                 </div>
-                <div class="skeleton-price">
+                <div class="skeleton-price" style="width: 180px; padding: 16px;">
                   <div class="skeleton-line short"></div>
                 </div>
               </div>
@@ -58,7 +57,7 @@
       }
       <div class="apartment-card-list">
         @for (apartment of apartments; track apartment.id) {
-          <div class="apartment-card">
+          <div class="apartment-card" (click)="navigateToDetails(apartment.id)">
 
             <div class="image-placeholder">
               <img [src]="apartment.photos" alt="{{ apartment.name }}" class="apartment-image">
@@ -71,9 +70,9 @@
               </p>
 
               <div class="key-features">
-                <span>🛌 {{ apartment.bedrooms }} beds</span>
-                <span>🛁 {{ apartment.bathrooms }} baths</span>
-                <span>👥 Max {{ apartment.maxGuests }} guests</span>
+                <span>{{ apartment.bedrooms }} beds</span>
+                <span>{{ apartment.bathrooms }} baths</span>
+                <span>Max {{ apartment.maxGuests }} guests</span>
               </div>
 
               @if (apartment.amenities && apartment.amenities.length > 0) {
@@ -83,9 +82,9 @@
               }
 
               @if (!apartment.isAvailable) {
-                <span class="status-badge unavailable">Currently Unavailable</span>
+                <span class="status-badge unavailable">Not Available</span>
               } @else if (!apartment.isActive) {
-                <span class="status-badge inactive">Inactive Listing</span>
+                <span class="status-badge inactive">Inactive</span>
               }
 
             </div>
@@ -97,7 +96,15 @@
                 <span class="cleaning-fee">+$ {{ apartment.cleaningFee }} cleaning fee</span>
               </div>
 
-              <button class="view-details-btn" [routerLink]="['/apartment', apartment.id]">View Details</button>
+              <button class="view-details-btn"
+                      [disabled]="!apartment.isAvailable || !apartment.isActive"
+                      (click)="navigateToDetails(apartment.id); $event.stopPropagation()">
+                @if (apartment.isAvailable && apartment.isActive) {
+                  See availability
+                } @else {
+                  Not Available
+                }
+              </button>
             </div>
 
           </div>
