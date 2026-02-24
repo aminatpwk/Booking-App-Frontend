@@ -1,100 +1,107 @@
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-  <h2>Register</h2>
-  <div class="register-form">
-    <p>
-      <label for="user-first-name">First Name</label>
+<form class="auth-form" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <h2 class="auth-form__title">Register</h2>
+
+  <div class="auth-form__fields">
+    <div class="auth-form__field">
+      <label class="auth-form__label" for="user-first-name">First Name</label>
       <input
+        class="auth-form__input"
+        [class.auth-form__input--error]="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched"
         id="user-first-name"
         formControlName="firstName"
         type="text"
-        [class.error]="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched"
       />
       @if (registrationForm.get('firstName')?.touched) {
         @if (registrationForm.get('firstName')?.hasError('required')) {
-          <span class="error-message">First name is required.</span>
+          <span class="auth-form__error">First name is required.</span>
         } @else if (registrationForm.get('firstName')?.hasError('minlength')) {
-          <span class="error-message">First name should have at least 3 characters.</span>
+          <span class="auth-form__error">First name should have at least 3 characters.</span>
         }
       }
-    </p>
+    </div>
 
-    <p>
-      <label for="user-last-name">Last Name</label>
+    <div class="auth-form__field">
+      <label class="auth-form__label" for="user-last-name">Last Name</label>
       <input
+        class="auth-form__input"
+        [class.auth-form__input--error]="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched"
         id="user-last-name"
         formControlName="lastName"
         type="text"
-        [class.error]="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched"
       />
       @if (registrationForm.get('lastName')?.touched) {
         @if (registrationForm.get('lastName')?.hasError('required')) {
-          <span class="error-message">Last name is required.</span>
+          <span class="auth-form__error">Last name is required.</span>
         } @else if (registrationForm.get('lastName')?.hasError('minlength')) {
-          <span class="error-message">Last name should have at least 5 characters.</span>
+          <span class="auth-form__error">Last name should have at least 5 characters.</span>
         }
       }
-    </p>
+    </div>
 
-    <p>
-      <label for="user-email">E-mail</label>
+    <div class="auth-form__field">
+      <label class="auth-form__label" for="user-email">E-mail</label>
       <input
+        class="auth-form__input"
+        [class.auth-form__input--error]="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
         id="user-email"
         formControlName="email"
         type="email"
-        [class.error]="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
       />
       @if (registrationForm.get('email')?.touched) {
         @if (registrationForm.get('email')?.hasError('required')) {
-          <span class="error-message">E-mail is required.</span>
+          <span class="auth-form__error">E-mail is required.</span>
         } @else if (registrationForm.get('email')?.hasError('email')) {
-          <span class="error-message">E-mail format is not valid.</span>
+          <span class="auth-form__error">E-mail format is not valid.</span>
         }
       }
-    </p>
+    </div>
 
-    <p>
-      <label for="user-password">Password</label>
+    <div class="auth-form__field">
+      <label class="auth-form__label" for="user-password">Password</label>
       <input
+        class="auth-form__input"
+        [class.auth-form__input--error]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
         id="user-password"
         formControlName="password"
         type="password"
-        [class.error]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
       />
       @if (registrationForm.get('password')?.touched) {
         @if (registrationForm.get('password')?.hasError('required')) {
-          <span class="error-message">Password is required.</span>
+          <span class="auth-form__error">Password is required.</span>
         } @else if (registrationForm.get('password')?.hasError('minlength')) {
-          <span class="error-message">Password has to be at least 8 characters long.</span>
+          <span class="auth-form__error">Password has to be at least 8 characters long.</span>
         }
       }
-    </p>
+    </div>
 
-    <p>
-      <label for="user-confirm-password">Confirm Password</label>
+    <div class="auth-form__field">
+      <label class="auth-form__label" for="user-confirm-password">Confirm Password</label>
       <input
+        class="auth-form__input"
+        [class.auth-form__input--error]="
+          (registrationForm.get('confirmPassword')?.invalid && registrationForm.get('confirmPassword')?.touched)
+          || (registrationForm.hasError('passwordsDoNotMatch') && registrationForm.get('confirmPassword')?.touched)"
         id="user-confirm-password"
         formControlName="confirmPassword"
         type="password"
-        [class.error]="registrationForm.get('confirmPassword')?.invalid && registrationForm.get('confirmPassword')?.touched || registrationForm.hasError('passwordsDoNotMatch') && registrationForm.get('confirmPassword')?.touched"
       />
       @if (registrationForm.get('confirmPassword')?.touched) {
         @if (registrationForm.get('confirmPassword')?.hasError('required')) {
-          <span class="error-message">Confirm password field is required.</span>
+          <span class="auth-form__error">Confirm password field is required.</span>
         } @else if (registrationForm.hasError('passwordsDoNotMatch') && registrationForm.get('confirmPassword')?.value) {
-          <span class="error-message">Passwords do not match.</span>
+          <span class="auth-form__error">Passwords do not match.</span>
         }
       }
-    </p>
-
-  <p>
-    @if (formSubmitted && registrationForm.invalid){
-      <span class="error-message">Please fill out all the fields!</span>
-    }
-    <button type="submit">Register</button>
-  </p>
-
-  <p class="login-redirect">
-    Already have an account? <a href="/login">Log in here.</a>
-  </p>
+    </div>
   </div>
+
+  @if (formSubmitted && registrationForm.invalid) {
+    <span class="auth-form__error">Please fill out all the fields!</span>
+  }
+
+  <button class="btn btn--primary btn--lg btn--full" type="submit">Register</button>
+
+  <p class="auth-form__footer">
+    Already have an account? <a routerLink="/login">Log in here.</a>
+  </p>
 </form>

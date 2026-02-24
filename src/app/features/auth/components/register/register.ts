@@ -4,6 +4,7 @@ import {Header} from '../../../../shared/components/header/header';
 import {ToastService} from '../../../../core/services/toast.service';
 import {Observable} from 'rxjs';
 import {AuthService} from '../../../../core/services/auth.service';
+import {RouterLink} from '@angular/router';
 
 
 @Component({
@@ -11,6 +12,7 @@ import {AuthService} from '../../../../core/services/auth.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    RouterLink,
   ],
   templateUrl: './register.html',
   styleUrl: './register.css'

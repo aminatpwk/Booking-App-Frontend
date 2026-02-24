@@ -1,8 +1,8 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <h2>Booking App platform entry</h2>
+<form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <h2 class="auth-form__title">Booking App platform entry</h2>
 
-  <div class="role-selector">
-    <label>
+  <div class="auth-form__role-selector">
+    <label class="auth-form__role-option">
       <input
         type="radio"
         name="role"
@@ -10,9 +10,9 @@
         [(ngModel)]="selectedRole"
         [ngModelOptions]="{standalone: true}"
       />
-      Login as User
+      <span>Login as User</span>
     </label>
-    <label>
+    <label class="auth-form__role-option">
       <input
         type="radio"
         name="role"
@@ -20,39 +20,43 @@
         [(ngModel)]="selectedRole"
         [ngModelOptions]="{standalone: true}"
       />
-      Login as Owner
+      <span>Login as Owner</span>
     </label>
   </div>
 
-  <div class="login-form">
-    <p>
-      <label for = "user-email">E-mail</label>
+  <div class="auth-form__fields">
+    <div class="auth-form__field">
+      <label class="auth-form__label" for="user-email">E-mail</label>
       <input
+        class="auth-form__input"
+        [class.auth-form__input--error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
         id="user-email"
         type="email"
         formControlName="email"
-        />
-      @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']){
-        <span class="error-message">E-mail is required.</span>
+      />
+      @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']) {
+        <span class="auth-form__error">E-mail is required.</span>
       }
-    </p>
+    </div>
 
-    <p>
-      <label for="user-password">Password</label>
+    <div class="auth-form__field">
+      <label class="auth-form__label" for="user-password">Password</label>
       <input
+        class="auth-form__input"
+        [class.auth-form__input--error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
         id="user-password"
         type="password"
         formControlName="password"
-        />
-      @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']){
-        <span class="error-message">Password is required.</span>
+      />
+      @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']) {
+        <span class="auth-form__error">Password is required.</span>
       }
-    </p>
+    </div>
   </div>
 
-  <button type="submit">Log In</button>
+  <button class="btn btn--primary btn--lg btn--full" type="submit">Log In</button>
 
-  <p class="register-redirect">
-    Don't have an account? <a href="/register">Register here.</a>
+  <p class="auth-form__footer">
+    Don't have an account? <a routerLink="/register">Register here.</a>
   </p>
 </form>
