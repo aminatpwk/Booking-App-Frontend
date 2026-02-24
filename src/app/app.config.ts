@@ -7,7 +7,6 @@ import {provideToastr} from 'ngx-toastr';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {loadingInterceptorFn} from './core/interceptor/loading.interceptor';
 import {errorInterceptorFn} from './core/interceptor/error.interceptor';
-import {AuthInterceptor} from './core/interceptor/auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
