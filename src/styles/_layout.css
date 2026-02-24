@@ -1,0 +1,116 @@
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+.container--md {
+  max-width: var(--container-md);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+.page {
+  padding: var(--space-10) var(--space-6);
+}
+
+.page--sm {
+  max-width: var(--container-md);
+  margin: 2.5rem auto;
+  padding: var(--space-5) var(--space-6);
+}
+
+.content-page {
+  max-width: var(--container-md);
+  margin: 2.5rem auto;
+  padding: var(--space-5) var(--space-6);
+  background-color: var(--color-surface);
+  line-height: var(--leading-relaxed);
+  font-family: var(--font-sans);
+}
+
+.content-page h1 {
+  color: var(--color-brand-600);
+  font-size: var(--text-4xl);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-8);
+  text-align: center;
+}
+
+.content-section {
+  margin-bottom: 1.875rem;
+  padding: var(--space-5);
+  border-left: 5px solid var(--color-brand-600);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-sm);
+}
+
+.content-section h2 {
+  color: var(--color-gray-700);
+  font-size: var(--text-2xl);
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+}
+
+.content-section p {
+  color: #555;
+  font-size: var(--text-lg);
+}
+
+.content-section--danger {
+  border-left-color: rgba(220,53,69,0.7);
+  background-color: #fceceb;
+}
+
+.content-section--success {
+  border-left-color: rgba(40,167,69,0.7);
+  background-color: #ebf9ec;
+}
+
+.content-section--warning {
+  border-left-color: rgba(255,165,0,0.8);
+  background-color: #fffaf0;
+}
+
+.content-section--info {
+  border-left-color: rgba(0,123,255,0.7);
+  background-color: #e6f7ff;
+}
+
+.content-section--neutral {
+  border-left-color: rgba(108,117,125,0.7);
+  background-color: #f2f2f2;
+  font-style: italic;
+}
+
+.content-section--creator {
+  border-left-color: rgba(30,108,4,0.61);
+  background-color: #e9f5e9;
+  font-style: italic;
+}
+
+.content-list {
+  list-style: disc;
+  padding-left: var(--space-6);
+  margin-top: var(--space-4);
+}
+
+.content-list--square {
+  list-style: square;
+}
+
+.content-list--none {
+  list-style: none;
+  padding-left: 0;
+}
+
+.content-list li {
+  margin-bottom: var(--space-2);
+  font-size: 1.05em;
+  color: #444;
+}
+
+.content-list li strong {
+  font-weight: var(--font-bold);
+  color: var(--color-brand-600);
+}

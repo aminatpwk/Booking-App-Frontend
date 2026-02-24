@@ -1,2 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
 @import 'ngx-toastr/toastr';
+
+@import './styles/_variables.css';
+
+@import './styles/_base.css';
+
+@import './styles/_buttons.css';
+@import './styles/_forms.css';
+@import './styles/_badges.css';
+@import './styles/_cards.css';
+@import './styles/_states.css';
+@import './styles/_modals.css';
+@import './styles/_layout.css';
+@import './styles/_pagination.css';
