@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 
@@ -17,12 +17,17 @@ export class Searchbar implements OnInit {
   guestCount: string='3 adults · 0 children · 1 room';
   pageNumber: number = 0;
   pageSize: number = 10;
+  @ViewChild('locationInput') locationInput!: ElementRef<HTMLInputElement>;
 
   constructor(private router: Router) {
   }
 
   ngOnInit(): void{
     //TODO: implement logic
+  }
+
+  ngAfterViewInit(): void {
+    this.locationInput.nativeElement.focus();
   }
 
   onSearch(): void{

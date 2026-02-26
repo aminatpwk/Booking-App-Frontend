@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, signal, ViewChild} from '@angular/core';
 import {Subject, takeUntil} from 'rxjs';
 import {Amenity, Apartment, ApartmentHelper, ApartmentType} from '../../../core/models/apartment';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -29,6 +29,9 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
   bookingCalculation = signal<BookingCalculation | null>(null);
   bookingForm!: FormGroup;
 
+  @ViewChild('thumbnailStrip') thumbnailStrip!: ElementRef<HTMLDivElement>;
+  @ViewChild('bookingModal') bookingModal!: ElementRef<HTMLDivElement>;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private apartmentService: ApartmentService,
@@ -56,6 +59,12 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private scrollThumbnailIntoView(): void {
+    const strip = this.thumbnailStrip.nativeElement;
+    const thumb = strip.children[this.currentImageIndex()] as HTMLElement;
+    thumb?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
   private initializeBookingForm(): void {
@@ -130,10 +139,8 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
   }
 
   nextImage(): void {
-    const photos = this.photos;
-    if (photos.length > 0) {
-      this.currentImageIndex.update(idx => (idx + 1) % photos.length);
-    }
+    this.currentImageIndex.update(idx => (idx + 1) % this.photos.length);
+    this.scrollThumbnailIntoView();
   }
 
   previousImage(): void {
@@ -166,6 +173,7 @@ export class ApartmentDetails implements OnInit,  OnDestroy {
       return;
     }
     this.isBookingModalOpen.set(true);
+    setTimeout(() => this.bookingModal.nativeElement.focus(), 0);
   }
 
   closeBookingModal(): void {

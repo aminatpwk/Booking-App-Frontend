@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-owner',
@@ -8,9 +8,11 @@ import { Component } from '@angular/core';
 })
 export class DashboardOwner {
   activeSection: string = 'overview';
+  @ViewChild('mainPanel') mainPanel!: ElementRef<HTMLElement>;
 
   setActiveSection(section: string): void{
     this.activeSection = section;
+    this.mainPanel.nativeElement.scrollTop = 0;
   }
 
 
