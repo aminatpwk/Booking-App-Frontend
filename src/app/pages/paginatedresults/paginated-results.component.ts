@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Apartment, ApartmentSearchDto, SortOption} from '../../core/models/apartment';
+import {Apartment, ApartmentHelper, ApartmentSearchDto, ApartmentType, SortOption} from '../../core/models/apartment';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ApartmentService} from '../../core/services/apartment.service';
 import {Subject, switchMap, takeUntil} from 'rxjs';
@@ -143,8 +143,14 @@ export class PaginatedResults implements OnInit, OnDestroy {
       return 'No amenities listed';
     }
 
-    const preview = amenities.slice(0, 3).map(a => a.name).join(', ');
-    return amenities.length > 3 ? `${preview}...` : preview;
+    const preview = amenities.slice(0, 3)
+      .map(a => ApartmentHelper.getAmenityDisplayName(a))
+      .join(', ');
+    return amenities.length > 3 ? `${preview} +${amenities.length - 3} more` : preview;
+  }
+
+  getTypeName(type: ApartmentType): string {
+    return ApartmentHelper.getTypeDisplayName(type);
   }
 
   formatPrice(price: number): string {

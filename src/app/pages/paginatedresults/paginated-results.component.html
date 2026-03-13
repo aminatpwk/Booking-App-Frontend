@@ -60,13 +60,21 @@
           <div class="apartment-card" (click)="navigateToDetails(apartment.id)">
 
             <div class="image-placeholder">
-              <img [src]="apartment.photos" alt="{{ apartment.name }}" class="apartment-image">
+              @if (apartment.photos && apartment.photos.length > 0 && apartment.photos[0].imageData) {
+                <img
+                  [src]="'data:' + apartment.photos[0].imageType + ';base64,' + apartment.photos[0].imageData"
+                  [alt]="apartment.name"
+                  class="apartment-image"
+                />
+              } @else {
+                <img src="placeholder-apartment.png" [alt]="apartment.name" class="apartment-image" />
+              }
             </div>
 
             <div class="details">
               <h3 class="apartment-name">{{ apartment.name }}</h3>
               <p class="type-location-line">
-                **{{ apartment.type }}** in {{ apartment.city }}, {{ apartment.country }}
+                {{ getTypeName(apartment.type) }} · {{ apartment.city }}, {{ apartment.country }}
               </p>
 
               <div class="key-features">
@@ -77,7 +85,7 @@
 
               @if (apartment.amenities && apartment.amenities.length > 0) {
                 <p class="amenities-snippet">
-                  Includes: {{getAmenitiesPreview(apartment.amenities)}}
+                  Includes: {{ getAmenitiesPreview(apartment.amenities) }}
                 </p>
               }
 
