@@ -17,19 +17,42 @@ export const routes: Routes = [
   //lazy loading on the homepage component
   {path: '',loadComponent: () => import('./pages/home/home').then(c=>c.Home)},
 
-  //pages routes
+  //static pages
   {path: 'about-bookingapp', component: About},
   {path: 'contact', component: Contact},
   {path: 'policies', component:  Policies},
   {path: 'terms',   component: Terms},
   {path: 'rights', component: Rights},
 
+  //auth
   {path: 'register', component: Register},
   {path: 'login', component: Login},
+
+  //uncomment for the booking e-mail confirmation link
+  // {
+  //   path: 'booking/confirm/:token',
+  //   loadComponent: () =>
+  //     import('./pages/booking-action/booking-action').then(c => c.BookingAction),
+  //   data: { action: 'confirm' }
+  // },
+  // {
+  //   path: 'booking/cancel/:token',
+  //   loadComponent: () =>
+  //     import('./pages/booking-action/booking-action').then(c => c.BookingAction),
+  //   data: { action: 'cancel' }
+  // },
+
+  //protected routes
   {path: 'user-dashboard', component:Dashboard, canActivate: [authGuard]},
   {path: 'register-owner', component: RegisterOwner, canActivate: [authGuard]},
   {path: 'dashboard-owner', component: DashboardOwner, canActivate: [authGuard]},
-  {path: 'results', component: PaginatedResults},
 
-  {path: 'apartment/:id', component: ApartmentDetails}
+  //search results and detail
+  {path: 'results', component: PaginatedResults},
+  {path: 'apartment/:id', component: ApartmentDetails},
+
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found').then(c=>c.NotFound)
+  }
 ];

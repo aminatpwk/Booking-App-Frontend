@@ -3,7 +3,11 @@ import {BehaviorSubject, catchError, Observable, shareReplay, tap, throwError} f
 import {Apartment} from '../models/apartment';
 import {OwnerBookingListItem} from '../../features/owner/models/owner-booking.model';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class OwnerService{
   private readonly apiUrl = environment.apiUrl;
   private apartmentsSubject = new BehaviorSubject<Apartment[]>([]);

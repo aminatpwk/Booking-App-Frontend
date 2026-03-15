@@ -32,7 +32,7 @@ export class RegisterOwner implements OnInit {
       return;
     }
 
-    if(this.authService.getUserId() == "Owner"){
+    if(this.authService.role() == "Owner"){
       this.toastService.showInfo('Info', 'You are already registered as an owner.');
       this.router.navigate(['/dashboard-owner']);
       return;

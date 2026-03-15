@@ -80,6 +80,8 @@ export interface ApartmentSearchDto {
   minPrice?: number;
   maxPrice?: number;
   apartmentType?:string;
+  sortBy?: string;
+  sortDescending?: boolean;
   orderBy?: string;
   country?: string;
   city?: string;

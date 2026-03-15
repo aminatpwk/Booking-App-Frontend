@@ -127,7 +127,7 @@ export class App implements OnInit{
     clearTimeout(this.timeoutId);
     document.removeEventListener('mousedown', this.eventListener, true);
     document.removeEventListener('mousemove', this.eventListener, true);
-    document.addEventListener('keypress', this.eventListener, true);
+    document.removeEventListener('keypress', this.eventListener, true);
     document.removeEventListener('scroll', this.eventListener, true);
   }
 
