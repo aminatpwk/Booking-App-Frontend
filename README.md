@@ -119,4 +119,10 @@ This project is proprietary software developed by Amina.
 
 ---
 
+## UI
+
+<img width="1827" height="893" alt="Screenshot 2026-03-22 225603" src="https://github.com/user-attachments/assets/d86d9558-3605-47fe-a479-76afa4596c36" />
+
+---
+
 _treat people with kindness :)_
