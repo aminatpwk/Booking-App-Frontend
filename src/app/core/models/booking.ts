@@ -9,7 +9,7 @@ export enum BookingStatus {
 }
 
 export interface Booking{
-  id: string;
+  id?: string;
   apartmentId: string;
   apartment?: Apartment;
   start: Date | string;
@@ -19,10 +19,11 @@ export interface Booking{
   priceForPeriod: number;
   cleaningFee: number;
   amenitiesUpCharge: number;
-  createdOnUtc: Date | string;
+  createdOnUtc?: Date | string;
   confirmedOnUtc?: Date | string;
   cancelledOnUtc?: Date | string;
   completedOnUtc?: Date | string;
+  confirmationToken?: string;
 }
 
 export interface CreateBookingDto{
@@ -49,7 +50,7 @@ export class BookingHelper{
       [BookingStatus.Cancelled]: 'Cancelled',
       [BookingStatus.Completed]: 'Completed'
     };
-    return statusNames[status];
+    return statusNames[status] ?? status;
   }
 
   static getStatusClass(status: BookingStatus): string {
@@ -60,7 +61,7 @@ export class BookingHelper{
       [BookingStatus.Cancelled]: 'status-cancelled',
       [BookingStatus.Completed]: 'status-completed'
     };
-    return statusClasses[status];
+    return statusClasses[status] ?? '';
   }
 
   static canBeCancelled(booking: Booking): boolean {
@@ -69,7 +70,9 @@ export class BookingHelper{
   }
 
   static canBeReviewed(booking: Booking): boolean {
-    return booking.status === BookingStatus.Completed;
+    const endDate = new Date(booking.end);
+    const now = new Date();
+    return endDate < now && booking.status === BookingStatus.Completed;
   }
 
   static formatDateRange(start: Date | string, end: Date | string): string {
@@ -111,19 +114,6 @@ export class BookingHelper{
       style: 'currency',
       currency: currency
     }).format(price);
-  }
-
-  static isPastDate(booking: Booking): boolean {
-    return new Date(booking.end) < new Date();
-  }
-
-  static isUpcomingDate(booking: Booking): boolean {
-    return new Date(booking.start) > new Date();
-  }
-
-  static isCurrentDate(booking: Booking): boolean {
-    const now = new Date();
-    return new Date(booking.start) <= now && new Date(booking.end) >= now;
   }
 
   static validateBookingDates(start: Date | string, end: Date | string): string | null{

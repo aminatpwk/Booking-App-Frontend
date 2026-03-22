@@ -43,7 +43,8 @@ export const routes: Routes = [
   // },
 
   //protected routes
-  {path: 'user-dashboard', component:Dashboard, canActivate: [authGuard]},
+  //{path: 'user-dashboard', component:Dashboard, canActivate: [authGuard]},
+  {path: 'user-dashboard', component:Dashboard},
   {path: 'register-owner', component: RegisterOwner, canActivate: [authGuard]},
   {path: 'dashboard-owner', component: DashboardOwner, canActivate: [authGuard]},
 
