@@ -47,6 +47,7 @@ export class App implements OnInit{
           this.showNavigation = false;
           this.showAuthButtons = false;
           this.isUserDashboard = true;
+          this.hideFooter = true;
           if(this.authService.isLoggedIn()) {
             // this.loadUserWithOwnerStatus();
           }

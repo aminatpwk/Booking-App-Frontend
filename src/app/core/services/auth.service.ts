@@ -44,7 +44,8 @@ export class AuthService {
       return this.http.post(`${this.apiUrl}/User/login`, loginPayload, {responseType: 'text'})
         .pipe(tap(token => {
           if(token){
-            localStorage.setItem('token', token);
+            const clean = token.replace(/^"|"$/g, '');
+            localStorage.setItem('token', clean);
           }
         }));
     }

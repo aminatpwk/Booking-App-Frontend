@@ -298,15 +298,17 @@
 @if (reviewingBooking()) {
   <div class="modal-overlay" (click)="closeReviewModal()">
     <div class="review-modal" (click)="$event.stopPropagation()">
+
       <div class="review-modal__header">
         <div>
-          <h2>Write a Review</h2>
-          <p>{{ reviewingBooking()!.apartment?.name }}</p>
+          <p class="review-modal__header-meta">Completed stay</p>
+          <h2>{{ reviewingBooking()!.apartment?.name || 'Your stay' }}</h2>
         </div>
         <button class="modal-close" (click)="closeReviewModal()">×</button>
       </div>
 
       <form [formGroup]="reviewForm" class="review-modal__body" (ngSubmit)="submitReview()">
+
         <div class="star-field">
           <label class="field-label">Your rating <span class="required">*</span></label>
           <div class="stars">
@@ -320,25 +322,25 @@
                 (click)="setRating(star)"
               >★</button>
             }
+            @if (reviewForm.value.rating > 0) {
+              <span class="rating-label">
+                @switch (reviewForm.value.rating) {
+                  @case (1) { Poor }
+                  @case (2) { Fair }
+                  @case (3) { Good }
+                  @case (4) { Very good }
+                  @case (5) { Excellent }
+                }
+              </span>
+            } @else {
+              <span class="field-hint" style="margin-left: 6px;">Click to rate</span>
+            }
           </div>
-          @if (reviewForm.value.rating === 0) {
-            <span class="field-hint">Click to rate</span>
-          } @else {
-            <span class="field-hint rating-label">
-              @switch (reviewForm.value.rating) {
-                @case (1) { Poor }
-                @case (2) { Fair }
-                @case (3) { Good }
-                @case (4) { Very Good }
-                @case (5) { Excellent }
-              }
-            </span>
-          }
         </div>
 
         <div class="comment-field">
           <label class="field-label" for="comment">
-            Comment <span class="field-optional">(optional, max 500 chars)</span>
+            Comment <span class="field-optional">(required)</span>
           </label>
           <textarea
             id="comment"
@@ -350,20 +352,26 @@
           <span class="char-count">{{ (reviewForm.value.comment?.length || 0) }} / 500</span>
         </div>
 
-        <div class="review-modal__footer">
-          <button type="button" class="btn btn--ghost btn--md" (click)="closeReviewModal()">
+      </form>
+
+      <div class="review-modal__footer">
+        <p class="review-modal__footer-hint">Reviews help other guests find great stays</p>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn--ghost btn--sm" (click)="closeReviewModal()">
             Cancel
           </button>
           <button
-            type="submit"
-            class="btn btn--primary btn--md"
+            type="button"
+            class="btn btn--primary btn--sm"
             [disabled]="isSubmittingReview() || reviewForm.value.rating < 1"
+            (click)="submitReview()"
           >
             @if (isSubmittingReview()) { Submitting... }
-            @else { Submit Review }
+            @else { Submit review }
           </button>
         </div>
-      </form>
+      </div>
+
     </div>
   </div>
 }
